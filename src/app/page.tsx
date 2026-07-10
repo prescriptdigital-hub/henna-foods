@@ -268,7 +268,7 @@ function BrandStorySection() {
                   <blockquote
                     className="font-heading text-white/80 text-2xl font-medium italic leading-snug"
                   >
-                    "From our kitchen to the world."
+                    &ldquo;From our kitchen to the world.&rdquo;
                   </blockquote>
                 </div>
               </div>
@@ -298,7 +298,7 @@ function BrandStorySection() {
               Henna Foods creates premium treats made to bring joy, love, and elegance to everyday moments. From buttery cookies to crunchy chinchin, every product is crafted with care and made to be shared.
             </p>
             <p className="font-body text-base text-chocolate/60 leading-relaxed mb-8">
-              We believe food is one of life's greatest pleasures, and we pour that belief into everything we bake. Every bite carries warmth, beauty, and care.
+              We believe food is one of life&apos;s greatest pleasures, and we pour that belief into everything we bake. Every bite carries warmth, beauty, and care.
             </p>
             <div className="flex flex-wrap gap-3 mb-10">
               {['Premium Ingredients', 'Made with Love', 'Freshly Baked', 'Giftable'].map(tag => (

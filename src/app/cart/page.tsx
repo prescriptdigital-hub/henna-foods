@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
-import type { Metadata } from 'next'
 
 export default function CartPage() {
   const { state, removeItem, updateQuantity, totalItems, totalPrice } = useCart()

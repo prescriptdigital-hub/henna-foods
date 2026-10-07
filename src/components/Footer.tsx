@@ -12,6 +12,7 @@ const shopLinks = [
 
 const aboutLinks = [
   { label: 'Our Story', href: '/about' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'Quality Promise', href: '/about#quality' },
   { label: 'Contact Us', href: '/contact' },
 ]

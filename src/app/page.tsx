@@ -4,12 +4,15 @@ import ProductCard from '@/components/ProductCard'
 import QualityIconCard from '@/components/QualityIconCard'
 import Newsletter from '@/components/Newsletter'
 import Badge from '@/components/Badge'
+import KenBurnsShowcase from '@/components/KenBurnsShowcase'
+import { GALLERY } from '@/lib/gallery'
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <ProductShowcaseSection />
+      <GalleryShowcaseSection />
       <BrandStorySection />
       <QualityPromiseSection />
       <FeaturedProductsSection />
@@ -232,6 +235,27 @@ function ProductShowcaseSection() {
             variant="chinchin"
           />
         </div>
+      </div>
+    </section>
+  )
+}
+
+function GalleryShowcaseSection() {
+  return (
+    <section className="section-padding" style={{ backgroundColor: '#FFF4E1' }}>
+      <div className="container-henna">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
+          <div>
+            <span className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-gold block mb-3">
+              A Closer Look
+            </span>
+            <h2 className="section-title">Tied in gold, made to share</h2>
+          </div>
+          <Link href="/gallery" className="btn-secondary self-start sm:self-auto">
+            View the full gallery
+          </Link>
+        </div>
+        <KenBurnsShowcase images={GALLERY} />
       </div>
     </section>
   )

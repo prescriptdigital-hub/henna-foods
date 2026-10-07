@@ -11,6 +11,7 @@ const navLinks = [
   { label: 'Cookies', href: '/cookies' },
   { label: 'Chinchin', href: '/chinchin' },
   { label: 'Wholesale', href: '/wholesale' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]

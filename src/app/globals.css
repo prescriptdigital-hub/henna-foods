@@ -106,3 +106,42 @@
     @apply w-16 h-0.5 bg-gold rounded-full;
   }
 }
+
+/* Ken Burns showcase: slow zoom and drift, crossfading between photos */
+.kb-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+}
+.kb-slide.is-active { opacity: 1; z-index: 2; }
+.kb-slide.is-prev { opacity: 1; z-index: 1; }
+
+.kb-img { transform-origin: center; will-change: transform; }
+.kb-slide.is-active .kb-img,
+.kb-slide.is-prev .kb-img {
+  animation-duration: 8s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+.kb-slide.is-active .kb-0, .kb-slide.is-prev .kb-0 { animation-name: kb-in-left; }
+.kb-slide.is-active .kb-1, .kb-slide.is-prev .kb-1 { animation-name: kb-out-right; }
+.kb-slide.is-active .kb-2, .kb-slide.is-prev .kb-2 { animation-name: kb-in-up; }
+.kb-slide.is-active .kb-3, .kb-slide.is-prev .kb-3 { animation-name: kb-out-down; }
+.kb-paused .kb-img,
+.kb-paused .kb-progress { animation-play-state: paused !important; }
+
+@keyframes kb-in-left  { from { transform: scale(1.02) translate(1%, 0); }    to { transform: scale(1.16) translate(-3%, -1.5%); } }
+@keyframes kb-out-right { from { transform: scale(1.18) translate(-2%, 1%); } to { transform: scale(1.04) translate(2%, 0); } }
+@keyframes kb-in-up    { from { transform: scale(1.04) translate(0, 2%); }    to { transform: scale(1.17) translate(1.5%, -2.5%); } }
+@keyframes kb-out-down { from { transform: scale(1.16) translate(2%, -2%); }  to { transform: scale(1.03) translate(-1%, 1.5%); } }
+
+.kb-progress { animation: kb-progress linear forwards; transform-origin: left; }
+@keyframes kb-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-slide .kb-img { animation: none !important; }
+  .kb-slide { transition-duration: 0.4s; }
+}
+.kb-thumbs { scrollbar-width: none; }
+.kb-thumbs::-webkit-scrollbar { display: none; }

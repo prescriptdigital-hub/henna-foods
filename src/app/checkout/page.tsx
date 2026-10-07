@@ -3,25 +3,47 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
+import OrderTotals from '@/components/OrderTotals'
+import { cartTotals, chargeCurrencyFor, formatMoney } from '@/lib/catalog'
+
+const USD_ENABLED = process.env.NEXT_PUBLIC_PAYSTACK_USD_ENABLED === 'true'
+
+const countries = ['Nigeria', 'Ghana', 'United Kingdom', 'United States', 'Canada', 'Other']
 
 export default function CheckoutPage() {
-  const router = useRouter()
-  const { state, totalPrice, clearCart } = useCart()
-  const [step, setStep] = useState<'details' | 'payment'>('details')
+  const { state, lines } = useCart()
+  const { currency, format } = useCurrency()
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
-    address: '', city: '', postcode: '', country: 'United Kingdom',
+    address: '', city: '', region: '', country: 'Nigeria',
   })
+  const [paying, setPaying] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const chargeCurrency = chargeCurrencyFor(currency, USD_ENABLED)
+  const chargeTotal = cartTotals(state.items, chargeCurrency).total
+  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setForm({ ...form, [key]: e.target.value })
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (step === 'details') {
-      setStep('payment')
-    } else {
-      clearCart()
-      router.push('/thank-you')
+    setError('')
+    setPaying(true)
+    try {
+      const res = await fetch('/api/checkout/initialize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: state.items, currency, customer: form }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.authorizationUrl) throw new Error(data.error ?? 'Payment could not start.')
+      // Hand over to Paystack's secure payment page; it returns to /thank-you.
+      window.location.href = data.authorizationUrl
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Payment could not start.')
+      setPaying(false)
     }
   }
 
@@ -36,6 +58,8 @@ export default function CheckoutPage() {
     )
   }
 
+  const label = 'font-body text-xs font-semibold text-chocolate/60 mb-1.5 block'
+
   return (
     <section className="section-padding bg-cream">
       <div className="container-henna">
@@ -46,93 +70,81 @@ export default function CheckoutPage() {
 
         <div className="grid lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-8">
-              {(['details', 'payment'] as const).map((s, i) => (
-                <div key={s} className="flex items-center gap-3">
-                  {i > 0 && <div className="w-12 h-px bg-gold/30" />}
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center font-body text-xs font-bold transition-colors ${
-                        step === s ? 'bg-chocolate text-white' : step === 'payment' && s === 'details' ? 'bg-gold text-chocolate' : 'bg-gold/20 text-chocolate/50'
-                      }`}
-                    >
-                      {step === 'payment' && s === 'details' ? '✓' : i + 1}
-                    </div>
-                    <span className={`font-body text-sm capitalize ${step === s ? 'font-semibold text-chocolate' : 'text-chocolate/50'}`}>
-                      {s}
-                    </span>
-                  </div>
+            <form onSubmit={handleSubmit} className="bg-ivory rounded-2xl border border-gold/20 shadow-card p-6 lg:p-8 space-y-5">
+              <h2 className="font-heading text-xl font-semibold text-chocolate mb-6">Delivery details</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="firstName" className={label}>First name</label>
+                  <input id="firstName" type="text" value={form.firstName} onChange={set('firstName')} className="input-henna" required autoComplete="given-name" />
                 </div>
-              ))}
-            </div>
+                <div>
+                  <label htmlFor="lastName" className={label}>Last name</label>
+                  <input id="lastName" type="text" value={form.lastName} onChange={set('lastName')} className="input-henna" required autoComplete="family-name" />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="email" className={label}>Email</label>
+                  <input id="email" type="email" value={form.email} onChange={set('email')} className="input-henna" required autoComplete="email" placeholder="your@email.com" />
+                </div>
+                <div>
+                  <label htmlFor="phone" className={label}>Phone</label>
+                  <input id="phone" type="tel" value={form.phone} onChange={set('phone')} className="input-henna" required autoComplete="tel" placeholder="+234 800 000 0000" />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="address" className={label}>Delivery address</label>
+                <input id="address" type="text" value={form.address} onChange={set('address')} className="input-henna" required autoComplete="street-address" placeholder="House number and street" />
+              </div>
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div>
+                  <label htmlFor="city" className={label}>City</label>
+                  <input id="city" type="text" value={form.city} onChange={set('city')} className="input-henna" required autoComplete="address-level2" />
+                </div>
+                <div>
+                  <label htmlFor="region" className={label}>State / region</label>
+                  <input id="region" type="text" value={form.region} onChange={set('region')} className="input-henna" autoComplete="address-level1" />
+                </div>
+                <div>
+                  <label htmlFor="country" className={label}>Country</label>
+                  <select id="country" value={form.country} onChange={set('country')} className="input-henna">
+                    {countries.map(c => <option key={c}>{c}</option>)}
+                  </select>
+                </div>
+              </div>
 
-            <form onSubmit={handleSubmit} className="bg-ivory rounded-2xl border border-gold/20 shadow-card p-6 lg:p-8">
-              {step === 'details' ? (
-                <div className="space-y-5">
-                  <h2 className="font-heading text-xl font-semibold text-chocolate mb-6">Delivery details</h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">First name</label>
-                      <input type="text" value={form.firstName} onChange={e => setForm({...form, firstName: e.target.value})} className="input-henna" required placeholder="First name"/>
-                    </div>
-                    <div>
-                      <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Last name</label>
-                      <input type="text" value={form.lastName} onChange={e => setForm({...form, lastName: e.target.value})} className="input-henna" required placeholder="Last name"/>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Email</label>
-                    <input type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} className="input-henna" required placeholder="your@email.com"/>
-                  </div>
-                  <div>
-                    <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Address</label>
-                    <input type="text" value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="input-henna" required placeholder="Street address"/>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">City</label>
-                      <input type="text" value={form.city} onChange={e => setForm({...form, city: e.target.value})} className="input-henna" required placeholder="City"/>
-                    </div>
-                    <div>
-                      <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Postcode</label>
-                      <input type="text" value={form.postcode} onChange={e => setForm({...form, postcode: e.target.value})} className="input-henna" required placeholder="Postcode"/>
-                    </div>
-                  </div>
-                  <button type="submit" className="btn-primary w-full justify-center mt-2">
-                    Continue to Payment
-                  </button>
+              <div className="rounded-xl border border-gold/30 bg-cream p-5 mt-2">
+                <div className="flex items-center gap-3 mb-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D6A62F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                  <h3 className="font-heading text-base font-semibold text-chocolate">Secure payment with Paystack</h3>
                 </div>
-              ) : (
-                <div className="space-y-5">
-                  <h2 className="font-heading text-xl font-semibold text-chocolate mb-6">Payment</h2>
-                  <div>
-                    <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Card number</label>
-                    <input type="text" className="input-henna" placeholder="1234 5678 9012 3456" maxLength={19}/>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Expiry</label>
-                      <input type="text" className="input-henna" placeholder="MM / YY" maxLength={7}/>
-                    </div>
-                    <div>
-                      <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">CVV</label>
-                      <input type="text" className="input-henna" placeholder="123" maxLength={4}/>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="font-body text-xs font-semibold text-chocolate/60 mb-1.5 block">Name on card</label>
-                    <input type="text" className="input-henna" placeholder="As it appears on your card"/>
-                  </div>
-                  <div className="flex gap-3 mt-2">
-                    <button type="button" onClick={() => setStep('details')} className="btn-secondary flex-1 justify-center">
-                      Back
-                    </button>
-                    <button type="submit" className="btn-primary flex-1 justify-center">
-                      Place Order · £{totalPrice.toFixed(2)}
-                    </button>
-                  </div>
-                </div>
+                <p className="font-body text-xs text-chocolate/60 leading-relaxed">
+                  Pay by card, bank transfer, USSD or bank account on Paystack&apos;s secure page. We never see or store your card details.
+                </p>
+                {chargeCurrency !== currency && (
+                  <p className="font-body text-xs text-chocolate/75 mt-3">
+                    Paystack will charge this order in naira: <strong className="text-chocolate">{formatMoney(chargeTotal, chargeCurrency)}</strong>.
+                  </p>
+                )}
+              </div>
+
+              {error && (
+                <p role="alert" className="font-body text-sm text-rose-red bg-rose-red/5 border border-rose-red/20 rounded-lg px-4 py-3">
+                  {error}
+                </p>
               )}
+
+              <div className="flex flex-col-reverse sm:flex-row gap-3 pt-1">
+                <Link href="/cart" className="btn-secondary flex-1 justify-center">
+                  Back to cart
+                </Link>
+                <button type="submit" disabled={paying} className="btn-primary flex-1 justify-center disabled:opacity-60 disabled:cursor-wait">
+                  {paying ? 'Opening Paystack...' : `Pay ${formatMoney(chargeTotal, chargeCurrency)}`}
+                </button>
+              </div>
             </form>
           </div>
 
@@ -140,32 +152,23 @@ export default function CheckoutPage() {
             <div className="bg-ivory rounded-2xl border border-gold/20 shadow-card p-6 sticky top-28">
               <h2 className="font-heading text-lg font-semibold text-chocolate mb-5">Order Summary</h2>
               <div className="space-y-3 mb-5">
-                {state.items.map(item => (
+                {lines.map(item => (
                   <div key={item.id} className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-10 rounded-lg shrink-0 overflow-hidden bg-cream">
-                        <Image
-                          src={item.id.includes('chinchin') ? '/images/products/chinchin-label.jpg' : '/images/products/cookies-label.jpg'}
-                          alt=""
-                          fill
-                          sizes="40px"
-                          className="object-cover"
-                        />
+                        <Image src={item.product.image} alt="" fill sizes="40px" className="object-cover" />
                       </div>
                       <div>
-                        <p className="font-body text-xs font-semibold text-chocolate leading-tight">{item.name}</p>
+                        <p className="font-body text-xs font-semibold text-chocolate leading-tight">{item.product.name}</p>
                         <p className="font-body text-xs text-chocolate/40">x{item.quantity}</p>
                       </div>
                     </div>
-                    <span className="font-body text-sm font-semibold text-chocolate shrink-0">£{(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-body text-sm font-semibold text-chocolate shrink-0">{format(item.lineTotal)}</span>
                   </div>
                 ))}
               </div>
               <div className="pt-4 border-t border-gold/20">
-                <div className="flex justify-between font-heading text-lg font-semibold text-chocolate">
-                  <span>Total</span>
-                  <span>£{totalPrice.toFixed(2)}</span>
-                </div>
+                <OrderTotals size="sm" />
               </div>
             </div>
           </div>

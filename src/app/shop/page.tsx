@@ -32,7 +32,6 @@ export default function ShopPage() {
               name="Bukkie's Premium Cookies"
               tagline="Rich. Buttery. Unforgettable."
               description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting and sharing."
-              price={12.99}
               weight="950g jar"
               href="/cookies"
               badge="Best Seller"
@@ -45,7 +44,6 @@ export default function ShopPage() {
               name="Richie Premium Chinchin"
               tagline="Crunchy. Joyful. Delicious."
               description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Joy in every single bite."
-              price={9.99}
               weight="500g jar"
               href="/chinchin"
               badge="New"

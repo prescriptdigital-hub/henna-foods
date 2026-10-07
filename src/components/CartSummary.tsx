@@ -1,10 +1,14 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
+import { BulkNudge } from './BulkSavings'
 
 export default function CartSummary() {
-  const { state, removeItem, updateQuantity, closeCart, totalItems, totalPrice } = useCart()
+  const { state, lines, removeItem, updateQuantity, closeCart, totalItems, totalPrice, discount } = useCart()
+  const { format } = useCurrency()
 
   if (!state.isOpen) return null
 
@@ -22,7 +26,7 @@ export default function CartSummary() {
           <div>
             <h2 className="font-heading text-xl font-semibold text-chocolate">Your Cart</h2>
             <p className="font-body text-xs text-chocolate/50 mt-0.5">
-              {totalItems === 0 ? 'Empty' : `${totalItems} item${totalItems !== 1 ? 's' : ''}`}
+              {totalItems === 0 ? 'Empty' : `${totalItems} jar${totalItems !== 1 ? 's' : ''}`}
             </p>
           </div>
           <button
@@ -57,12 +61,14 @@ export default function CartSummary() {
             </div>
           ) : (
             <ul className="space-y-4">
-              {state.items.map(item => (
+              {lines.map(item => (
                 <li key={item.id} className="flex gap-4 p-4 bg-cream rounded-xl border border-gold/15">
-                  <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-[#FBE6C4] to-[#A65F2B] shrink-0" />
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-cream shrink-0">
+                    <Image src={item.product.image} alt="" fill sizes="64px" className="object-cover" />
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-heading text-sm font-semibold text-chocolate truncate">{item.name}</p>
-                    <p className="font-body text-xs text-chocolate/50 mt-0.5">£{item.price.toFixed(2)} each</p>
+                    <p className="font-heading text-sm font-semibold text-chocolate truncate">{item.product.name}</p>
+                    <p className="font-body text-xs text-chocolate/50 mt-0.5">{format(item.unitPrice)} each</p>
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -91,7 +97,7 @@ export default function CartSummary() {
                       </svg>
                     </button>
                     <span className="font-heading text-base font-semibold text-chocolate">
-                      £{(item.price * item.quantity).toFixed(2)}
+                      {format(item.lineTotal)}
                     </span>
                   </div>
                 </li>
@@ -102,11 +108,18 @@ export default function CartSummary() {
 
         {state.items.length > 0 && (
           <div className="px-6 py-5 border-t border-gold/20">
+            <div className="mb-3"><BulkNudge /></div>
+            {discount > 0 && (
+              <div className="flex items-center justify-between font-body text-xs text-henna-green font-semibold mb-1">
+                <span>Bulk saving</span>
+                <span>-{format(discount)}</span>
+              </div>
+            )}
             <div className="flex items-center justify-between mb-1">
-              <span className="font-body text-sm text-chocolate/60">Subtotal</span>
-              <span className="font-heading text-lg font-semibold text-chocolate">£{totalPrice.toFixed(2)}</span>
+              <span className="font-body text-sm text-chocolate/60">Total</span>
+              <span className="font-heading text-lg font-semibold text-chocolate">{format(totalPrice)}</span>
             </div>
-            <p className="font-body text-xs text-chocolate/40 mb-4">Shipping calculated at checkout</p>
+            <p className="font-body text-xs text-chocolate/40 mb-4">Delivery confirmed after ordering</p>
             <Link
               href="/checkout"
               onClick={closeCart}

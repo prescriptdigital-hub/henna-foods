@@ -212,7 +212,6 @@ function ProductShowcaseSection() {
             name="Bukkie's Premium Cookies"
             tagline="Rich. Buttery. Unforgettable."
             description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat."
-            price={12.99}
             weight="950g jar"
             href="/cookies"
             badge="Best Seller"
@@ -225,7 +224,6 @@ function ProductShowcaseSection() {
             name="Richie Premium Chinchin"
             tagline="Crunchy. Joyful. Delicious."
             description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Pure joy in every bite."
-            price={9.99}
             weight="500g jar"
             href="/chinchin"
             badge="New"
@@ -367,11 +365,10 @@ function FeaturedProductsSection() {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl">
           <ProductCard
-            id="bukkies-cookies-feat"
+            id="bukkies-cookies"
             name="Bukkie's Premium Cookies"
             tagline="Rich. Buttery. Unforgettable."
             description="Made with fine ingredients, rich butter goodness, baked to perfection, and perfect for gifting and sharing."
-            price={12.99}
             weight="950g jar"
             href="/cookies"
             badge="Best Seller"
@@ -380,11 +377,10 @@ function FeaturedProductsSection() {
             variant="cookies"
           />
           <ProductCard
-            id="richie-chinchin-feat"
+            id="richie-chinchin"
             name="Richie Premium Chinchin"
             tagline="Crunchy. Joyful. Delicious."
             description="Perfect crunchy texture, joyful snack for every moment, great for gifting and parties, made with care."
-            price={9.99}
             weight="500g jar"
             href="/chinchin"
             rating={4.8}

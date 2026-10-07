@@ -7,6 +7,9 @@ import LineIcon from '@/components/LineIcon'
 import Badge from '@/components/Badge'
 import Newsletter from '@/components/Newsletter'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
+import { BulkTierTable } from '@/components/BulkSavings'
+import { PRODUCTS } from '@/lib/catalog'
 
 const benefits = [
   { icon: 'leaf', text: 'Made with fine, natural ingredients' },
@@ -26,6 +29,8 @@ export default function CookiesPage() {
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
   const { addItem } = useCart()
+  const { currency, format } = useCurrency()
+  const product = PRODUCTS['bukkies-cookies']
 
   const images = [
     { src: '/images/products/cookies-label.jpg', label: "Bukkie's jar with gold ribbon and label" },
@@ -97,9 +102,7 @@ export default function CookiesPage() {
               </div>
 
               <div className="flex items-baseline gap-3 mb-6">
-                <span className="font-heading text-4xl font-semibold text-chocolate">£12.99</span>
-                <span className="font-body text-sm text-chocolate/40 line-through">£15.99</span>
-                <Badge variant="rose">Save 19%</Badge>
+                <span className="font-heading text-4xl font-semibold text-chocolate">{format(product.prices[currency])}</span>
               </div>
 
               <p className="font-body text-base text-chocolate/70 leading-relaxed mb-8">
@@ -131,7 +134,7 @@ export default function CookiesPage() {
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => addItem({ id: 'bukkies-cookies', name: "Bukkie's Premium Cookies", price: 12.99 }, quantity)}
+                    onClick={() => addItem('bukkies-cookies', quantity)}
                     className="btn-primary flex-1 justify-center"
                   >
                     Add joy to your cart
@@ -140,6 +143,10 @@ export default function CookiesPage() {
                     Buy Now
                   </Link>
                 </div>
+              </div>
+
+              <div className="mb-8">
+                <BulkTierTable />
               </div>
 
               <div className="space-y-3 mb-8">

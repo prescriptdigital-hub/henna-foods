@@ -3,9 +3,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
+import OrderTotals from '@/components/OrderTotals'
+import { BulkNudge } from '@/components/BulkSavings'
 
 export default function CartPage() {
-  const { state, removeItem, updateQuantity, totalItems, totalPrice } = useCart()
+  const { state, lines, removeItem, updateQuantity, totalItems } = useCart()
+  const { format } = useCurrency()
 
   return (
     <section className="section-padding bg-cream">
@@ -13,7 +17,7 @@ export default function CartPage() {
         <div className="mb-10">
           <h1 className="font-heading text-4xl font-semibold text-chocolate mb-2">Your Cart</h1>
           <p className="font-body text-sm text-chocolate/50">
-            {totalItems === 0 ? 'Your basket is empty' : `${totalItems} item${totalItems !== 1 ? 's' : ''}`}
+            {totalItems === 0 ? 'Your basket is empty' : `${totalItems} jar${totalItems !== 1 ? 's' : ''}`}
           </p>
         </div>
 
@@ -33,14 +37,14 @@ export default function CartPage() {
         ) : (
           <div className="grid lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-4">
-              {state.items.map(item => (
+              {lines.map(item => (
                 <div
                   key={item.id}
                   className="flex gap-5 p-5 bg-ivory rounded-2xl border border-gold/20 shadow-card"
                 >
                   <div className="relative w-24 h-24 rounded-xl shrink-0 overflow-hidden bg-cream">
                     <Image
-                      src={item.id.includes('chinchin') ? '/images/products/chinchin-label.jpg' : '/images/products/cookies-label.jpg'}
+                      src={item.product.image}
                       alt=""
                       fill
                       sizes="96px"
@@ -48,8 +52,8 @@ export default function CartPage() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-heading text-lg font-semibold text-chocolate">{item.name}</h3>
-                    <p className="font-body text-sm text-chocolate/50 mt-0.5">£{item.price.toFixed(2)} each</p>
+                    <h3 className="font-heading text-lg font-semibold text-chocolate">{item.product.name}</h3>
+                    <p className="font-body text-sm text-chocolate/50 mt-0.5">{format(item.unitPrice)} each · {item.product.weight}</p>
                     <div className="flex items-center gap-2 mt-3">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -69,6 +73,7 @@ export default function CartPage() {
                   <div className="flex flex-col items-end justify-between">
                     <button
                       onClick={() => removeItem(item.id)}
+                      aria-label={`Remove ${item.product.name}`}
                       className="text-chocolate/30 hover:text-rose-red transition-colors p-1"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
@@ -79,7 +84,7 @@ export default function CartPage() {
                       </svg>
                     </button>
                     <span className="font-heading text-xl font-semibold text-chocolate">
-                      £{(item.price * item.quantity).toFixed(2)}
+                      {format(item.lineTotal)}
                     </span>
                   </div>
                 </div>
@@ -89,20 +94,8 @@ export default function CartPage() {
             <div className="lg:col-span-1">
               <div className="bg-ivory rounded-2xl border border-gold/20 shadow-card p-6 sticky top-28">
                 <h2 className="font-heading text-xl font-semibold text-chocolate mb-6">Order Summary</h2>
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between font-body text-sm text-chocolate/70">
-                    <span>Subtotal ({totalItems} items)</span>
-                    <span>£{totalPrice.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between font-body text-sm text-chocolate/70">
-                    <span>Shipping</span>
-                    <span className="text-henna-green font-semibold">Calculated at checkout</span>
-                  </div>
-                </div>
-                <div className="flex justify-between pt-4 border-t border-gold/20 mb-6">
-                  <span className="font-heading text-lg font-semibold text-chocolate">Total</span>
-                  <span className="font-heading text-2xl font-semibold text-chocolate">£{totalPrice.toFixed(2)}</span>
-                </div>
+                <div className="mb-6"><OrderTotals /></div>
+                <div className="mb-5"><BulkNudge /></div>
                 <Link href="/checkout" className="btn-primary w-full justify-center mb-3">
                   Proceed to Checkout
                 </Link>

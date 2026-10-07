@@ -4,13 +4,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Badge from './Badge'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
+import { PRODUCTS, type ProductId } from '@/lib/catalog'
 
 type ProductCardProps = {
-  id: string
+  id: ProductId
   name: string
   tagline: string
   description: string
-  price: number
   weight: string
   href: string
   badge?: string
@@ -39,7 +40,6 @@ export default function ProductCard({
   name,
   tagline,
   description,
-  price,
   weight,
   href,
   badge,
@@ -48,6 +48,8 @@ export default function ProductCard({
   variant = 'cookies',
 }: ProductCardProps) {
   const { addItem } = useCart()
+  const { currency, format } = useCurrency()
+  const product = PRODUCTS[id]
 
   const photos = {
     cookies: { src: '/images/products/cookies-label.jpg', alt: "Bukkie's Premium Cookies jar with gold ribbon" },
@@ -100,11 +102,11 @@ export default function ProductCard({
         <div className="mt-5 pt-4 border-t border-gold/20 flex items-center justify-between gap-3">
           <div>
             <span className="font-heading text-2xl font-semibold text-chocolate">
-              £{price.toFixed(2)}
+              {format(product.prices[currency])}
             </span>
           </div>
           <button
-            onClick={() => addItem({ id, name, price })}
+            onClick={() => addItem(id)}
             className="btn-primary text-xs px-5 py-2.5"
           >
             Add to Cart

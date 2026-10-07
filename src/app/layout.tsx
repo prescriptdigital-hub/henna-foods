@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/context/CartContext'
+import { CurrencyProvider } from '@/context/CurrencyContext'
+import LiveChat from '@/components/LiveChat'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -39,13 +41,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${inter.variable}`}>
       <body className="bg-cream font-body text-chocolate antialiased">
-        <CartProvider>
-          <AnnouncementBar />
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <CartSummary />
-        </CartProvider>
+        <CurrencyProvider>
+          <CartProvider>
+            <AnnouncementBar />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <CartSummary />
+            <LiveChat />
+          </CartProvider>
+        </CurrencyProvider>
       </body>
     </html>
   )

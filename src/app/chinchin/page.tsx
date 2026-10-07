@@ -6,6 +6,9 @@ import Link from 'next/link'
 import Badge from '@/components/Badge'
 import Newsletter from '@/components/Newsletter'
 import { useCart } from '@/context/CartContext'
+import { useCurrency } from '@/context/CurrencyContext'
+import { BulkTierTable } from '@/components/BulkSavings'
+import { PRODUCTS } from '@/lib/catalog'
 
 const benefits = [
   { icon: 'star', text: 'Perfect crunchy texture every time' },
@@ -18,6 +21,8 @@ export default function ChinchinPage() {
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
   const { addItem } = useCart()
+  const { currency, format } = useCurrency()
+  const product = PRODUCTS['richie-chinchin']
 
   const images = [
     { src: '/images/products/chinchin-label.jpg', label: 'Richie jar with gold ribbon and label' },
@@ -89,7 +94,7 @@ export default function ChinchinPage() {
               </div>
 
               <div className="flex items-baseline gap-3 mb-6">
-                <span className="font-heading text-4xl font-semibold text-chocolate">£9.99</span>
+                <span className="font-heading text-4xl font-semibold text-chocolate">{format(product.prices[currency])}</span>
                 <span className="font-body text-sm text-chocolate/40">per jar</span>
               </div>
 
@@ -122,7 +127,7 @@ export default function ChinchinPage() {
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => addItem({ id: 'richie-chinchin', name: 'Richie Premium Chinchin', price: 9.99 }, quantity)}
+                    onClick={() => addItem('richie-chinchin', quantity)}
                     className="btn-primary flex-1 justify-center"
                   >
                     Add joy to your cart
@@ -131,6 +136,10 @@ export default function ChinchinPage() {
                     Buy Now
                   </Link>
                 </div>
+              </div>
+
+              <div className="mb-8">
+                <BulkTierTable />
               </div>
 
               <div className="space-y-3 mb-8">

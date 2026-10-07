@@ -7,6 +7,7 @@ const shopLinks = [
   { label: "Bukkie's Cookies", href: '/cookies' },
   { label: 'Richie Chinchin', href: '/chinchin' },
   { label: 'All Products', href: '/shop' },
+  { label: 'Bulk & Wholesale', href: '/wholesale' },
 ]
 
 const aboutLinks = [

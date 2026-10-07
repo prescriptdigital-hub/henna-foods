@@ -1,14 +1,12 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useReducer, useState } from 'react'
+import { cartTotals, isProductId, PRODUCTS, type Product, type ProductId } from '@/lib/catalog'
+import { useCurrency } from './CurrencyContext'
 
 export type CartItem = {
-  id: string
-  name: string
-  price: number
+  id: ProductId
   quantity: number
-  image?: string
-  variant?: string
 }
 
 type CartState = {
@@ -17,9 +15,9 @@ type CartState = {
 }
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'>; quantity: number }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'ADD_ITEM'; id: ProductId; quantity: number }
+  | { type: 'REMOVE_ITEM'; payload: ProductId }
+  | { type: 'UPDATE_QUANTITY'; payload: { id: ProductId; quantity: number } }
   | { type: 'CLEAR_CART' }
   | { type: 'TOGGLE_CART' }
   | { type: 'CLOSE_CART' }
@@ -28,12 +26,12 @@ type CartAction =
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existing = state.items.find(i => i.id === action.payload.id)
+      const existing = state.items.find(i => i.id === action.id)
       if (existing) {
         return {
           ...state,
           items: state.items.map(i =>
-            i.id === action.payload.id
+            i.id === action.id
               ? { ...i, quantity: i.quantity + action.quantity }
               : i
           ),
@@ -42,7 +40,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: action.quantity }],
+        items: [...state.items, { id: action.id, quantity: action.quantity }],
         isOpen: true,
       }
     }
@@ -71,15 +69,21 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
+export type CartLine = CartItem & { product: Product; unitPrice: number; lineTotal: number }
+
 type CartContextType = {
   state: CartState
-  addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void
-  removeItem: (id: string) => void
-  updateQuantity: (id: string, quantity: number) => void
+  lines: CartLine[]
+  addItem: (id: ProductId, quantity?: number) => void
+  removeItem: (id: ProductId) => void
+  updateQuantity: (id: ProductId, quantity: number) => void
   clearCart: () => void
   toggleCart: () => void
   closeCart: () => void
   totalItems: number
+  subtotal: number
+  discount: number
+  discountRate: number
   totalPrice: number
 }
 
@@ -88,6 +92,7 @@ const STORAGE_KEY = 'henna-cart'
 const CartContext = createContext<CartContextType | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { currency } = useCurrency()
   const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
   const [loaded, setLoaded] = useState(false)
 
@@ -95,7 +100,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
-      if (Array.isArray(saved)) dispatch({ type: 'HYDRATE', payload: saved })
+      if (Array.isArray(saved)) {
+        const items = saved
+          .filter(i => isProductId(i?.id) && Number.isInteger(i?.quantity) && i.quantity > 0)
+          .map(i => ({ id: i.id as ProductId, quantity: i.quantity as number }))
+        dispatch({ type: 'HYDRATE', payload: items })
+      }
     } catch {}
     setLoaded(true)
   }, [])
@@ -107,21 +117,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   }, [loaded, state.items])
 
-  const addItem = (item: Omit<CartItem, 'quantity'>, quantity = 1) =>
-    dispatch({ type: 'ADD_ITEM', payload: item, quantity })
-  const removeItem = (id: string) => dispatch({ type: 'REMOVE_ITEM', payload: id })
-  const updateQuantity = (id: string, quantity: number) =>
+  const addItem = (id: ProductId, quantity = 1) =>
+    dispatch({ type: 'ADD_ITEM', id, quantity })
+  const removeItem = (id: ProductId) => dispatch({ type: 'REMOVE_ITEM', payload: id })
+  const updateQuantity = (id: ProductId, quantity: number) =>
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })
   const clearCart = () => dispatch({ type: 'CLEAR_CART' })
   const toggleCart = () => dispatch({ type: 'TOGGLE_CART' })
   const closeCart = () => dispatch({ type: 'CLOSE_CART' })
 
-  const totalItems = state.items.reduce((sum, i) => sum + i.quantity, 0)
-  const totalPrice = state.items.reduce((sum, i) => sum + i.price * i.quantity, 0)
+  const lines = state.items.map(item => {
+    const product = PRODUCTS[item.id]
+    const unitPrice = product.prices[currency]
+    return { ...item, product, unitPrice, lineTotal: unitPrice * item.quantity }
+  })
+  const totals = cartTotals(state.items, currency)
 
   return (
     <CartContext.Provider
-      value={{ state, addItem, removeItem, updateQuantity, clearCart, toggleCart, closeCart, totalItems, totalPrice }}
+      value={{
+        state,
+        lines,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        toggleCart,
+        closeCart,
+        totalItems: totals.jars,
+        subtotal: totals.subtotal,
+        discount: totals.discount,
+        discountRate: totals.tier?.discount ?? 0,
+        totalPrice: totals.total,
+      }}
     >
       {children}
     </CartContext.Provider>

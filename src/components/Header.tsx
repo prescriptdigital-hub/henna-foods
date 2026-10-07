@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import HennaLogo from './HennaLogo'
+import CurrencySwitcher from './CurrencySwitcher'
 import { useCart } from '@/context/CartContext'
 
 const navLinks = [
   { label: 'Shop', href: '/shop' },
   { label: 'Cookies', href: '/cookies' },
   { label: 'Chinchin', href: '/chinchin' },
+  { label: 'Wholesale', href: '/wholesale' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -52,6 +54,7 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <CurrencySwitcher className="hidden sm:inline-flex" />
             <button
               onClick={toggleCart}
               aria-label={`Cart, ${totalItems} items`}
@@ -100,6 +103,10 @@ export default function Header() {
           style={{ backgroundColor: '#FFF9EF' }}
         >
           <nav className="container-henna flex flex-col gap-1">
+            <div className="sm:hidden px-3 pb-3 mb-1 border-b border-gold/15 flex items-center justify-between">
+              <span className="font-body text-xs text-chocolate/50">Currency</span>
+              <CurrencySwitcher />
+            </div>
             {navLinks.map(link => (
               <Link
                 key={link.href}

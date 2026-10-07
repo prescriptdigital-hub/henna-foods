@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import Badge from '@/components/Badge'
 import Newsletter from '@/components/Newsletter'
@@ -19,9 +20,10 @@ export default function ChinchinPage() {
   const { addItem } = useCart()
 
   const images = [
-    { bg: 'linear-gradient(145deg, #FFF3D8 0%, #F4C430 35%, #E8A735 65%, #8A4B1F 100%)', label: 'Pack shot' },
-    { bg: 'linear-gradient(145deg, #8A4B1F 0%, #E8A735 50%, #FFF3D8 100%)', label: 'Bowl' },
-    { bg: 'linear-gradient(145deg, #FFF3D8 0%, #F28A2E 50%, #4F9A3D 100%)', label: 'Lifestyle' },
+    { src: '/images/products/chinchin-label.jpg', label: 'Richie jar with gold ribbon and label' },
+    { src: '/images/products/chinchin-jar.jpg', label: 'A full jar of Richie chinchin' },
+    { src: '/images/products/chinchin-stack.jpg', label: 'Stacked jars of Richie chinchin' },
+    { src: '/images/products/chinchin-trio.jpg', label: 'Richie party multipack' },
   ]
 
   return (
@@ -42,30 +44,26 @@ export default function ChinchinPage() {
         <div className="container-henna">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div>
-              <div
-                className="w-full aspect-square rounded-3xl overflow-hidden mb-4 shadow-card"
-                style={{ background: images[activeImage].bg }}
-              >
-                <div className="w-full h-full flex items-center justify-center opacity-20">
-                  <svg width="120" height="120" viewBox="0 0 100 100" fill="none">
-                    <rect x="20" y="35" width="14" height="14" rx="3" fill="#3B1F10" opacity="0.5" transform="rotate(15 27 42)"/>
-                    <rect x="38" y="28" width="12" height="12" rx="2.5" fill="#3B1F10" opacity="0.4" transform="rotate(-10 44 34)"/>
-                    <rect x="55" y="38" width="13" height="13" rx="3" fill="#3B1F10" opacity="0.5" transform="rotate(20 61.5 44.5)"/>
-                    <rect x="30" y="52" width="11" height="11" rx="2.5" fill="#3B1F10" opacity="0.4" transform="rotate(-5 35.5 57.5)"/>
-                    <rect x="48" y="55" width="14" height="14" rx="3" fill="#3B1F10" opacity="0.5" transform="rotate(10 55 62)"/>
-                    <rect x="65" y="50" width="11" height="11" rx="2.5" fill="#3B1F10" opacity="0.4" transform="rotate(-15 70.5 55.5)"/>
-                  </svg>
-                </div>
+              <div className="relative w-full aspect-square rounded-3xl overflow-hidden mb-4 shadow-card bg-cream">
+                <Image
+                  src={images[activeImage].src}
+                  alt={images[activeImage].label}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
               </div>
               <div className="flex gap-3">
                 {images.map((img, i) => (
                   <button
-                    key={i}
+                    key={img.src}
                     onClick={() => setActiveImage(i)}
-                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-150 ${activeImage === i ? 'border-gold shadow-gold' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                    style={{ background: img.bg }}
+                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-150 ${activeImage === i ? 'border-gold shadow-gold' : 'border-transparent opacity-60 hover:opacity-100'}`}
                     aria-label={img.label}
-                  />
+                  >
+                    <Image src={img.src} alt="" fill sizes="80px" className="object-cover" />
+                  </button>
                 ))}
               </div>
             </div>
@@ -92,7 +90,7 @@ export default function ChinchinPage() {
 
               <div className="flex items-baseline gap-3 mb-6">
                 <span className="font-heading text-4xl font-semibold text-chocolate">£9.99</span>
-                <span className="font-body text-sm text-chocolate/40">per pack</span>
+                <span className="font-body text-sm text-chocolate/40">per jar</span>
               </div>
 
               <p className="font-body text-base text-chocolate/70 leading-relaxed mb-8">
@@ -119,7 +117,7 @@ export default function ChinchinPage() {
                       +
                     </button>
                   </div>
-                  <span className="font-body text-xs text-chocolate/40">300g per pack</span>
+                  <span className="font-body text-xs text-chocolate/40">500g per jar</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">

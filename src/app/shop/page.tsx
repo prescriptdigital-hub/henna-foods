@@ -33,7 +33,7 @@ export default function ShopPage() {
               tagline="Rich. Buttery. Unforgettable."
               description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting and sharing."
               price={12.99}
-              weight="250g"
+              weight="950g jar"
               href="/cookies"
               badge="Best Seller"
               rating={4.9}
@@ -46,7 +46,7 @@ export default function ShopPage() {
               tagline="Crunchy. Joyful. Delicious."
               description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Joy in every single bite."
               price={9.99}
-              weight="300g"
+              weight="500g jar"
               href="/chinchin"
               badge="New"
               rating={4.8}

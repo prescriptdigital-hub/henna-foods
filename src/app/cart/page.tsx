@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 
@@ -37,14 +38,15 @@ export default function CartPage() {
                   key={item.id}
                   className="flex gap-5 p-5 bg-ivory rounded-2xl border border-gold/20 shadow-card"
                 >
-                  <div
-                    className="w-24 h-24 rounded-xl shrink-0"
-                    style={{
-                      background: item.id.includes('chinchin')
-                        ? 'linear-gradient(145deg, #FFF3D8, #F4C430, #8A4B1F)'
-                        : 'linear-gradient(145deg, #FBE6C4, #D4A574, #4B2413)',
-                    }}
-                  />
+                  <div className="relative w-24 h-24 rounded-xl shrink-0 overflow-hidden bg-cream">
+                    <Image
+                      src={item.id.includes('chinchin') ? '/images/products/chinchin-label.jpg' : '/images/products/cookies-label.jpg'}
+                      alt=""
+                      fill
+                      sizes="96px"
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-heading text-lg font-semibold text-chocolate">{item.name}</h3>
                     <p className="font-body text-sm text-chocolate/50 mt-0.5">£{item.price.toFixed(2)} each</p>

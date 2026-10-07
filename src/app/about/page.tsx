@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import QualityIconCard from '@/components/QualityIconCard'
 import Newsletter from '@/components/Newsletter'
@@ -31,10 +32,15 @@ export default function AboutPage() {
       <section className="section-padding bg-ivory">
         <div className="container-henna">
           <div className="grid lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
-            <div
-              className="aspect-square rounded-3xl"
-              style={{ background: 'linear-gradient(145deg, #FBE6C4 0%, #D4A574 40%, #A65F2B 80%, #3B1F10 100%)' }}
-            />
+            <div className="relative aspect-square rounded-3xl overflow-hidden shadow-card bg-cream">
+              <Image
+                src="/images/products/duo.jpg"
+                alt="A jar of Bukkie's cookies beside a jar of Richie chinchin"
+                fill
+                sizes="(min-width: 1024px) 480px, 100vw"
+                className="object-cover"
+              />
+            </div>
             <div>
               <h2 className="font-heading text-3xl lg:text-4xl font-semibold text-chocolate mb-6 leading-tight">
                 From Our Kitchen to the World

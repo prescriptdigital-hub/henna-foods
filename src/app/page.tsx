@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import ProductCard from '@/components/ProductCard'
 import QualityIconCard from '@/components/QualityIconCard'
@@ -102,29 +103,17 @@ function HeroSection() {
                 style={{
                   width: 'clamp(200px, 22vw, 288px)',
                   aspectRatio: '3/4',
-                  background: 'linear-gradient(160deg, #FBE6C4 0%, #C89B2C 35%, #A65F2B 65%, #3B1F10 100%)',
                   border: '1px solid rgba(214, 166, 47, 0.3)',
                 }}
               >
-                {/* Cookie illustration */}
-                <svg
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] opacity-90"
-                  width="160" height="160" viewBox="0 0 160 160"
-                  aria-hidden="true"
-                >
-                  <circle cx="80" cy="80" r="70" fill="#D4A574" opacity="0.45"/>
-                  <circle cx="80" cy="80" r="62" fill="#C89B2C" opacity="0.5"/>
-                  <circle cx="80" cy="80" r="54" fill="#A65F2B" opacity="0.55"/>
-                  <ellipse cx="56" cy="60" rx="8" ry="7" fill="#3B1F10" opacity="0.75"/>
-                  <ellipse cx="94" cy="50" rx="7" ry="6" fill="#4B2413" opacity="0.75"/>
-                  <ellipse cx="110" cy="78" rx="7" ry="6" fill="#3B1F10" opacity="0.75"/>
-                  <ellipse cx="90" cy="102" rx="8" ry="7" fill="#4B2413" opacity="0.75"/>
-                  <ellipse cx="54" cy="97" rx="7" ry="6" fill="#3B1F10" opacity="0.75"/>
-                  <ellipse cx="76" cy="76" rx="6" ry="5" fill="#4B2413" opacity="0.6"/>
-                  <ellipse cx="104" cy="62" rx="5" ry="4" fill="#3B1F10" opacity="0.6"/>
-                  <ellipse cx="46" cy="78" rx="5" ry="4" fill="#4B2413" opacity="0.55"/>
-                  <ellipse cx="48" cy="52" rx="22" ry="14" fill="white" opacity="0.07" transform="rotate(-35 48 52)"/>
-                </svg>
+                <Image
+                  src="/images/products/cookies-label.jpg"
+                  alt="Bukkie's Premium Cookies jar tied with gold ribbon"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 288px, 220px"
+                  className="object-cover"
+                />
 
                 {/* Premium seal */}
                 <div className="absolute top-4 right-4">
@@ -158,18 +147,15 @@ function HeroSection() {
                 style={{
                   width: 'clamp(96px, 10vw, 128px)',
                   aspectRatio: '1',
-                  background: 'linear-gradient(145deg, #FFF3D8 0%, #F4C430 45%, #E8A735 75%, #8A4B1F 100%)',
                 }}
               >
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" aria-hidden="true">
-                  <rect x="24" y="20" width="20" height="13" rx="4" fill="#8A4B1F" opacity="0.55" transform="rotate(-15 34 26)"/>
-                  <rect x="54" y="16" width="18" height="12" rx="4" fill="#A65F2B" opacity="0.5" transform="rotate(10 63 22)"/>
-                  <rect x="64" y="43" width="19" height="12" rx="4" fill="#8A4B1F" opacity="0.55" transform="rotate(-8 73 49)"/>
-                  <rect x="18" y="52" width="20" height="13" rx="4" fill="#A65F2B" opacity="0.5" transform="rotate(12 28 58)"/>
-                  <rect x="44" y="58" width="18" height="12" rx="4" fill="#8A4B1F" opacity="0.55" transform="rotate(-20 53 64)"/>
-                  <rect x="66" y="67" width="16" height="11" rx="3" fill="#A65F2B" opacity="0.5" transform="rotate(5 74 72)"/>
-                  <rect x="28" y="74" width="19" height="12" rx="4" fill="#8A4B1F" opacity="0.5" transform="rotate(15 37 80)"/>
-                </svg>
+                <Image
+                  src="/images/products/chinchin-label.jpg"
+                  alt="Richie Premium Chinchin jar"
+                  fill
+                  sizes="128px"
+                  className="object-cover"
+                />
                 <div
                   className="absolute bottom-0 left-0 right-0 px-2.5 py-2"
                   style={{ background: 'linear-gradient(to top, rgba(138,75,31,0.95) 0%, transparent 100%)' }}
@@ -227,7 +213,7 @@ function ProductShowcaseSection() {
             tagline="Rich. Buttery. Unforgettable."
             description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat."
             price={12.99}
-            weight="250g"
+            weight="950g jar"
             href="/cookies"
             badge="Best Seller"
             rating={4.9}
@@ -240,7 +226,7 @@ function ProductShowcaseSection() {
             tagline="Crunchy. Joyful. Delicious."
             description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Pure joy in every bite."
             price={9.99}
-            weight="300g"
+            weight="500g jar"
             href="/chinchin"
             badge="New"
             rating={4.8}
@@ -260,10 +246,15 @@ function BrandStorySection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="order-2 lg:order-1">
             <div className="relative">
-              <div
-                className="w-full aspect-square max-w-md rounded-3xl overflow-hidden"
-                style={{ background: 'linear-gradient(145deg, #FBE6C4 0%, #D4A574 40%, #A65F2B 70%, #3B1F10 100%)' }}
-              >
+              <div className="relative w-full aspect-square max-w-md rounded-3xl overflow-hidden bg-cream">
+                <Image
+                  src="/images/products/collection-stack.jpg"
+                  alt="Richie and Bukkie's jars stacked together"
+                  fill
+                  sizes="(min-width: 1024px) 448px, 100vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-chocolate/80 via-chocolate/10 to-transparent" />
                 <div className="absolute inset-0 flex items-end p-8">
                   <blockquote
                     className="font-heading text-white/80 text-2xl font-medium italic leading-snug"
@@ -272,10 +263,9 @@ function BrandStorySection() {
                   </blockquote>
                 </div>
               </div>
-              <div
-                className="absolute -bottom-6 -right-6 w-36 h-36 rounded-2xl overflow-hidden border-4 border-ivory shadow-card"
-                style={{ background: 'linear-gradient(145deg, #FFF3D8 0%, #F4C430 60%, #8A4B1F 100%)' }}
-              />
+              <div className="absolute -bottom-6 -right-6 w-36 h-36 rounded-2xl overflow-hidden border-4 border-ivory shadow-card">
+                <Image src="/images/products/chinchin-jar.jpg" alt="A full jar of Richie chinchin" fill sizes="144px" className="object-cover" />
+              </div>
               <div
                 className="absolute -top-4 -right-4 rounded-xl px-4 py-3 shadow-soft border"
                 style={{ backgroundColor: '#FFF9EF', borderColor: 'rgba(214, 166, 47, 0.3)' }}
@@ -382,7 +372,7 @@ function FeaturedProductsSection() {
             tagline="Rich. Buttery. Unforgettable."
             description="Made with fine ingredients, rich butter goodness, baked to perfection, and perfect for gifting and sharing."
             price={12.99}
-            weight="250g"
+            weight="950g jar"
             href="/cookies"
             badge="Best Seller"
             rating={4.9}
@@ -395,7 +385,7 @@ function FeaturedProductsSection() {
             tagline="Crunchy. Joyful. Delicious."
             description="Perfect crunchy texture, joyful snack for every moment, great for gifting and parties, made with care."
             price={9.99}
-            weight="300g"
+            weight="500g jar"
             href="/chinchin"
             rating={4.8}
             reviewCount={167}

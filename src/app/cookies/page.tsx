@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import LineIcon from '@/components/LineIcon'
 import Badge from '@/components/Badge'
@@ -27,9 +28,10 @@ export default function CookiesPage() {
   const { addItem } = useCart()
 
   const images = [
-    { bg: 'linear-gradient(145deg, #FBE6C4 0%, #D4A574 40%, #A65F2B 80%, #4B2413 100%)', label: 'Pack shot' },
-    { bg: 'linear-gradient(145deg, #4B2413 0%, #A65F2B 40%, #D4A574 80%, #FBE6C4 100%)', label: 'Close-up' },
-    { bg: 'linear-gradient(145deg, #FFF6EC 0%, #FBE6C4 50%, #C89B2C 100%)', label: 'Lifestyle' },
+    { src: '/images/products/cookies-label.jpg', label: "Bukkie's jar with gold ribbon and label" },
+    { src: '/images/products/cookies-trio.jpg', label: "Three jars of Bukkie's cookies" },
+    { src: '/images/products/cookies-stack.jpg', label: "Stacked jars of Bukkie's cookies" },
+    { src: '/images/products/cookies-multipack.jpg', label: "Bukkie's gift multipack" },
   ]
 
   return (
@@ -50,32 +52,26 @@ export default function CookiesPage() {
         <div className="container-henna">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div>
-              <div
-                className="w-full aspect-square rounded-3xl overflow-hidden mb-4 shadow-card"
-                style={{ background: images[activeImage].bg }}
-              >
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center opacity-20">
-                    <svg width="120" height="120" viewBox="0 0 100 100" fill="none">
-                      <circle cx="50" cy="50" r="38" stroke="#3B1F10" strokeWidth="2" fill="rgba(59,31,16,0.1)"/>
-                      <circle cx="35" cy="42" r="5" fill="#3B1F10" opacity="0.7"/>
-                      <circle cx="57" cy="38" r="4" fill="#3B1F10" opacity="0.6"/>
-                      <circle cx="48" cy="58" r="6" fill="#3B1F10" opacity="0.8"/>
-                      <circle cx="64" cy="55" r="3.5" fill="#3B1F10" opacity="0.6"/>
-                      <circle cx="40" cy="63" r="4" fill="#3B1F10" opacity="0.7"/>
-                    </svg>
-                  </div>
-                </div>
+              <div className="relative w-full aspect-square rounded-3xl overflow-hidden mb-4 shadow-card bg-cream">
+                <Image
+                  src={images[activeImage].src}
+                  alt={images[activeImage].label}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
               </div>
               <div className="flex gap-3">
                 {images.map((img, i) => (
                   <button
-                    key={i}
+                    key={img.src}
                     onClick={() => setActiveImage(i)}
-                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-150 ${activeImage === i ? 'border-gold shadow-gold' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                    style={{ background: img.bg }}
+                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-150 ${activeImage === i ? 'border-gold shadow-gold' : 'border-transparent opacity-60 hover:opacity-100'}`}
                     aria-label={img.label}
-                  />
+                  >
+                    <Image src={img.src} alt="" fill sizes="80px" className="object-cover" />
+                  </button>
                 ))}
               </div>
             </div>
@@ -130,7 +126,7 @@ export default function CookiesPage() {
                       +
                     </button>
                   </div>
-                  <span className="font-body text-xs text-chocolate/40">250g per pack</span>
+                  <span className="font-body text-xs text-chocolate/40">950g per jar</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">

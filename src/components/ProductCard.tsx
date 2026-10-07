@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import Badge from './Badge'
 import { useCart } from '@/context/CartContext'
@@ -48,44 +49,28 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { addItem } = useCart()
 
-  const gradients = {
-    cookies: 'from-[#FBE6C4] via-[#D4A574] to-[#A65F2B]',
-    chinchin: 'from-[#FFF3D8] via-[#F4C430] to-[#E8A735]',
+  const photos = {
+    cookies: { src: '/images/products/cookies-label.jpg', alt: "Bukkie's Premium Cookies jar with gold ribbon" },
+    chinchin: { src: '/images/products/chinchin-label.jpg', alt: 'Richie Premium Chinchin jar with gold ribbon' },
   }
 
   return (
     <div className="product-card group flex flex-col h-full">
       <Link href={href} className="block overflow-hidden rounded-t-[24px]">
-        <div
-          className={`relative h-64 bg-gradient-to-br ${gradients[variant]} overflow-hidden`}
-        >
+        <div className="relative h-64 bg-cream overflow-hidden">
+          <Image
+            src={photos[variant].src}
+            alt={photos[variant].alt}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
           {badge && (
             <div className="absolute top-4 left-4 z-10">
               <Badge variant="bestseller">{badge}</Badge>
             </div>
           )}
-          <div className="absolute inset-0 flex items-center justify-center opacity-20">
-            {variant === 'cookies' ? (
-              <svg width="120" height="120" viewBox="0 0 100 100" fill="none">
-                <circle cx="50" cy="50" r="38" stroke="#3B1F10" strokeWidth="2" fill="rgba(59,31,16,0.1)"/>
-                <circle cx="35" cy="42" r="5" fill="#3B1F10" opacity="0.6"/>
-                <circle cx="57" cy="38" r="4" fill="#3B1F10" opacity="0.5"/>
-                <circle cx="48" cy="58" r="6" fill="#3B1F10" opacity="0.7"/>
-                <circle cx="64" cy="55" r="3.5" fill="#3B1F10" opacity="0.5"/>
-                <circle cx="40" cy="62" r="4" fill="#3B1F10" opacity="0.6"/>
-              </svg>
-            ) : (
-              <svg width="120" height="120" viewBox="0 0 100 100" fill="none">
-                <rect x="20" y="35" width="14" height="14" rx="3" fill="#3B1F10" opacity="0.3" transform="rotate(15 27 42)"/>
-                <rect x="38" y="28" width="12" height="12" rx="2.5" fill="#3B1F10" opacity="0.25" transform="rotate(-10 44 34)"/>
-                <rect x="55" y="38" width="13" height="13" rx="3" fill="#3B1F10" opacity="0.3" transform="rotate(20 61.5 44.5)"/>
-                <rect x="30" y="52" width="11" height="11" rx="2.5" fill="#3B1F10" opacity="0.25" transform="rotate(-5 35.5 57.5)"/>
-                <rect x="48" y="55" width="14" height="14" rx="3" fill="#3B1F10" opacity="0.3" transform="rotate(10 55 62)"/>
-                <rect x="65" y="50" width="11" height="11" rx="2.5" fill="#3B1F10" opacity="0.25" transform="rotate(-15 70.5 55.5)"/>
-              </svg>
-            )}
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
             <span className="font-heading text-white/90 text-sm font-medium italic drop-shadow">
               {tagline}

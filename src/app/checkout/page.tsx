@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
@@ -142,10 +143,15 @@ export default function CheckoutPage() {
                 {state.items.map(item => (
                   <div key={item.id} className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-lg shrink-0"
-                        style={{ background: item.id.includes('chinchin') ? 'linear-gradient(145deg, #FFF3D8, #F4C430)' : 'linear-gradient(145deg, #FBE6C4, #A65F2B)' }}
-                      />
+                      <div className="relative w-10 h-10 rounded-lg shrink-0 overflow-hidden bg-cream">
+                        <Image
+                          src={item.id.includes('chinchin') ? '/images/products/chinchin-label.jpg' : '/images/products/cookies-label.jpg'}
+                          alt=""
+                          fill
+                          sizes="40px"
+                          className="object-cover"
+                        />
+                      </div>
                       <div>
                         <p className="font-body text-xs font-semibold text-chocolate leading-tight">{item.name}</p>
                         <p className="font-body text-xs text-chocolate/40">x{item.quantity}</p>

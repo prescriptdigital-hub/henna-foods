@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import LineIcon from '@/components/LineIcon'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
@@ -102,12 +103,12 @@ export default function ContactPage() {
                 <h2 className="font-heading text-2xl font-semibold text-chocolate mb-6">Get in touch</h2>
                 <div className="space-y-4">
                   {[
-                    { icon: '✉', label: 'Email', value: 'hello@hennafoods.com' },
-                    { icon: '📍', label: 'Location', value: 'United Kingdom' },
-                    { icon: '🕐', label: 'Response time', value: 'Within 1-2 business days' },
+                    { icon: 'mail' as const, label: 'Email', value: 'hello@hennafoods.com' },
+                    { icon: 'pin' as const, label: 'Location', value: 'United Kingdom' },
+                    { icon: 'clock' as const, label: 'Response time', value: 'Within 1-2 business days' },
                   ].map(item => (
                     <div key={item.label} className="flex items-start gap-4 p-4 bg-ivory rounded-xl border border-gold/20">
-                      <span className="text-xl leading-none mt-0.5">{item.icon}</span>
+                      <span className="mt-0.5 shrink-0"><LineIcon name={item.icon} /></span>
                       <div>
                         <div className="font-body text-xs font-semibold text-chocolate/60 uppercase tracking-wide mb-0.5">{item.label}</div>
                         <div className="font-body text-sm text-chocolate">{item.value}</div>

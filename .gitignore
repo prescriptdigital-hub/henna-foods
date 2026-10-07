@@ -16,3 +16,5 @@ dist/
 # Misc
 .DS_Store
 *.tsbuildinfo
+
+.vercel

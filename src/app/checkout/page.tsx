@@ -127,7 +127,7 @@ export default function CheckoutPage() {
                       Back
                     </button>
                     <button type="submit" className="btn-primary flex-1 justify-center">
-                      Place Order — £{totalPrice.toFixed(2)}
+                      Place Order · £{totalPrice.toFixed(2)}
                     </button>
                   </div>
                 </div>

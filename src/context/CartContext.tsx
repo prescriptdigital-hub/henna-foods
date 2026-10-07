@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, useContext, useEffect, useReducer, useState } from 'react'
 
 export type CartItem = {
   id: string
@@ -17,12 +17,13 @@ type CartState = {
 }
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'> }
+  | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'>; quantity: number }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
   | { type: 'CLEAR_CART' }
   | { type: 'TOGGLE_CART' }
   | { type: 'CLOSE_CART' }
+  | { type: 'HYDRATE'; payload: CartItem[] }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
@@ -33,7 +34,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
           ...state,
           items: state.items.map(i =>
             i.id === action.payload.id
-              ? { ...i, quantity: i.quantity + 1 }
+              ? { ...i, quantity: i.quantity + action.quantity }
               : i
           ),
           isOpen: true,
@@ -41,7 +42,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
+        items: [...state.items, { ...action.payload, quantity: action.quantity }],
         isOpen: true,
       }
     }
@@ -63,6 +64,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return { ...state, isOpen: !state.isOpen }
     case 'CLOSE_CART':
       return { ...state, isOpen: false }
+    case 'HYDRATE':
+      return { ...state, items: action.payload }
     default:
       return state
   }
@@ -70,7 +73,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
 type CartContextType = {
   state: CartState
-  addItem: (item: Omit<CartItem, 'quantity'>) => void
+  addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
   clearCart: () => void
@@ -80,13 +83,32 @@ type CartContextType = {
   totalPrice: number
 }
 
+const STORAGE_KEY = 'henna-cart'
+
 const CartContext = createContext<CartContextType | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
+  const [loaded, setLoaded] = useState(false)
 
-  const addItem = (item: Omit<CartItem, 'quantity'>) =>
-    dispatch({ type: 'ADD_ITEM', payload: item })
+  // Restore the basket saved from a previous visit
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
+      if (Array.isArray(saved)) dispatch({ type: 'HYDRATE', payload: saved })
+    } catch {}
+    setLoaded(true)
+  }, [])
+
+  useEffect(() => {
+    if (!loaded) return
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items))
+    } catch {}
+  }, [loaded, state.items])
+
+  const addItem = (item: Omit<CartItem, 'quantity'>, quantity = 1) =>
+    dispatch({ type: 'ADD_ITEM', payload: item, quantity })
   const removeItem = (id: string) => dispatch({ type: 'REMOVE_ITEM', payload: id })
   const updateQuantity = (id: string, quantity: number) =>
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })

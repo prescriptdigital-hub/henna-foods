@@ -124,11 +124,7 @@ export default function ChinchinPage() {
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => {
-                      for (let i = 0; i < quantity; i++) {
-                        addItem({ id: 'richie-chinchin', name: 'Richie Premium Chinchin', price: 9.99 })
-                      }
-                    }}
+                    onClick={() => addItem({ id: 'richie-chinchin', name: 'Richie Premium Chinchin', price: 9.99 }, quantity)}
                     className="btn-primary flex-1 justify-center"
                   >
                     Add joy to your cart

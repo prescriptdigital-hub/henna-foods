@@ -96,7 +96,7 @@ function HeroSection() {
                 }}
               />
 
-              {/* Main product card — Bukkie's Cookies */}
+              {/* Main product card: Bukkie's Cookies */}
               <div
                 className="relative rounded-3xl overflow-hidden shadow-soft"
                 style={{
@@ -152,7 +152,7 @@ function HeroSection() {
                 </div>
               </div>
 
-              {/* Secondary card — Richie Chinchin */}
+              {/* Secondary card: Richie Chinchin */}
               <div
                 className="absolute -bottom-4 -right-6 lg:-right-8 rounded-2xl overflow-hidden border-4 border-ivory shadow-card"
                 style={{

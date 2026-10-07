@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import LineIcon from '@/components/LineIcon'
 import Badge from '@/components/Badge'
 import Newsletter from '@/components/Newsletter'
 import { useCart } from '@/context/CartContext'
@@ -134,11 +135,7 @@ export default function CookiesPage() {
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => {
-                      for (let i = 0; i < quantity; i++) {
-                        addItem({ id: 'bukkies-cookies', name: "Bukkie's Premium Cookies", price: 12.99 })
-                      }
-                    }}
+                    onClick={() => addItem({ id: 'bukkies-cookies', name: "Bukkie's Premium Cookies", price: 12.99 }, quantity)}
                     className="btn-primary flex-1 justify-center"
                   >
                     Add joy to your cart
@@ -170,11 +167,11 @@ export default function CookiesPage() {
 
               <div className="flex items-center gap-6 mt-6 pt-6 border-t border-gold/20">
                 {[
-                  { icon: '🚚', label: 'Shipping', detail: '2-3 business days' },
-                  { icon: '🔄', label: 'Returns', detail: '7-day return policy' },
+                  { icon: 'truck' as const, label: 'Shipping', detail: '2-3 business days' },
+                  { icon: 'return' as const, label: 'Returns', detail: '7-day return policy' },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-2">
-                    <span className="text-base">{item.icon}</span>
+                    <LineIcon name={item.icon} size={18} />
                     <div>
                       <div className="font-body text-xs font-semibold text-chocolate">{item.label}</div>
                       <div className="font-body text-xs text-chocolate/45">{item.detail}</div>

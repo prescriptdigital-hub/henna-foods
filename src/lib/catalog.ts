@@ -1,6 +1,8 @@
 // Single source of truth for products, prices and bulk discounts.
 // Used by the browser and by the payment API, so totals can never drift.
 
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.hennafoods.com').replace(/\/$/, '')
+
 export type Currency = 'NGN' | 'GBP' | 'USD'
 
 export const CURRENCIES: { code: Currency; symbol: string; label: string; locale: string }[] = [

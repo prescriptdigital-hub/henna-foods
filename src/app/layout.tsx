@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/context/CartContext'
 import { CurrencyProvider } from '@/context/CurrencyContext'
+import { SITE_URL } from '@/lib/catalog'
 import LiveChat from '@/components/LiveChat'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Header from '@/components/Header'
@@ -23,6 +24,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Henna Foods | Elegant Taste. Joyful Moments.',
     template: '%s | Henna Foods',
@@ -34,6 +36,8 @@ export const metadata: Metadata = {
     title: 'Henna Foods | Elegant Taste. Joyful Moments.',
     description: 'Premium treats crafted to bring joy, love, and elegance to everyday moments.',
     type: 'website',
+    siteName: 'Henna Foods',
+    images: [{ url: '/images/products/collection-stack.jpg', width: 1600, height: 1280, alt: "Richie and Bukkie's jars stacked together" }],
   },
 }
 

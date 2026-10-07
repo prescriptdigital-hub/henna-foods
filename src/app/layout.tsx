@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import './globals.css'
@@ -52,7 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main>{children}</main>
             <Footer />
             <CartSummary />
-            <LiveChat />
+            <Suspense fallback={null}>
+              <LiveChat />
+            </Suspense>
           </CartProvider>
         </CurrencyProvider>
       </body>

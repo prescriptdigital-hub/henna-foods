@@ -39,7 +39,7 @@ export default function Header() {
     >
       <div className="container-henna">
         <div className="flex items-center justify-between h-18 lg:h-20">
-          <HennaLogo size="md" />
+          <HennaLogo size="md" priority />
 
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map(link => (

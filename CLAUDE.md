@@ -24,9 +24,10 @@ Elegance · Brilliance · Gracefulness · Joy · Life · Love · Premium quality
 
 The Henna Foods logo must stay consistent on every page, label, product card, and packaging mockup.
 
-- "Henna" is in **elegant gold serif** typography.
-- "FOODS" sits underneath in **coral/red uppercase** letters.
-- Multi-colored **petals sit at the top-right of "Henna," near the final "a."** Never move them.
+- The official logo is the **Henna Foods Golden Logo** (supplied October 2026). Use the artwork file, never redraw it: `public/images/brand/logo.png`, rendered through the `HennaLogo` component. Original source: `assets/brand-source/Henna Foods Golden Logo.png`.
+- "Henna" is in **elegant gold serif** with a flowing swash through the "e" and a tail on the final "a"; "FOODS" sits underneath in **coral/red spaced uppercase**, with a thin coral rule and small leaf mark below.
+- The Golden Logo has **no petals**. Do not add petals to it. (The earlier petal version is retired.)
+- The browser/app icon is the gold "H" from the logo on ivory (`src/app/icon.png`, `src/app/apple-icon.png`).
 - Do **not** create unrelated icons or monogram marks (no "B" monogram) that don't represent the Henna brand. A cookie icon is fine only as a small decorative icon, never as the main brand mark.
 
 ## Brands & taglines
@@ -90,7 +91,7 @@ Rose Red `#C41E3A` · Gold `#D6A62F` · Golden Yellow `#F4C430` · Warm Orange `
 
 **Use:** large white space, soft cream backgrounds, premium food photography, rounded product cards, gold borders, subtle rose accents (deep red and ivory roses, satin texture), clean ecommerce sections, warm food close-ups, elegant label details, soft shadows.
 
-**Avoid:** overcrowding, loud colors, **any pink**, cartoonish graphics, unrelated icons, cheap stock-photo feel, misplaced logo petals.
+**Avoid:** overcrowding, loud colors, **any pink**, cartoonish graphics, unrelated icons, cheap stock-photo feel, a redrawn or altered logo.
 
 ## Design tokens (CSS custom properties)
 
@@ -167,7 +168,7 @@ Site should match packaging style.
 - **Bukkie's:** cream/gold/brown + rose-red and ivory accents (no pink), elegant photography, premium seal/badge, deep-red and ivory rose / satin background motifs, chocolate-chip cookie photography; luxury bakery, romantic, giftable feel evoking desire, pleasure, love, and beauty.
 - **Richie:** cream/gold/golden-yellow/orange/toasted-brown + green accents, crunchy snack imagery, joyful-but-premium, warm African-inspired energy with global presentation, clean packaging-style cards evoking fun, joy, and sharing.
 
-**Label/sticker UI:** circular Henna Foods sticker · rectangular product label · small "Made with Love" sticker · "Premium Quality / Baked Fresh" sticker. Any sticker using the Henna logo must keep petals at top-right of "Henna." No unrelated monograms.
+**Label/sticker UI:** circular Henna Foods sticker · rectangular product label · small "Made with Love" sticker · "Premium Quality / Baked Fresh" sticker. Any sticker using the Henna logo must use the official Golden Logo artwork unaltered. No unrelated monograms.
 
 ## Ecommerce UI
 
@@ -206,7 +207,7 @@ Warm · elegant · joyful · confident · loving · premium. Example phrases: "M
 2. Reusable components (listed above).
 3. Page layouts (listed above).
 4. Responsive for desktop, tablet, mobile.
-5. Consistent logo + petal placement everywhere.
+5. Consistent official logo everywhere.
 6. Placeholder images, easy to replace.
 7. Premium food-ecommerce styling (cream bg, gold details, chocolate type, coral accents, rose petals, elegant spacing, soft shadows).
 8. Final result feels like a global premium food brand.
@@ -223,7 +224,7 @@ The site must feel like an original, one-of-a-kind premium brand — not a templ
 ## Do not
 
 - Use the wrong logo or unrelated monogram marks.
-- Move the Henna petals from the top-right of "Henna."
+- Redraw, recolour, stretch or add petals to the official Golden Logo.
 - Make the site look like a generic snack store.
 - Lose the elegant, premium, joyful, warm, food-focused feel.
 - Use em dashes or en dashes anywhere in visible copy.

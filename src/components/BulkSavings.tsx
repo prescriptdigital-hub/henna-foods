@@ -2,46 +2,51 @@
 
 import Link from 'next/link'
 import { BULK_TIERS, nextTier, WHOLESALE_MIN_JARS } from '@/lib/catalog'
+import { FEATURES } from '@/lib/site'
 import { useCart } from '@/context/CartContext'
 
-// Tier ladder for product pages: shows what each jar count unlocks.
+const OFFER = BULK_TIERS[0]
+
+// Product page panel: the multi-jar offer and progress towards it.
 export function BulkTierTable() {
   const { totalItems } = useCart()
+  const reached = totalItems >= OFFER.minJars
+  const progress = Math.min(1, totalItems / OFFER.minJars)
 
   return (
     <div className="rounded-xl border border-gold/30 bg-cream p-5">
-      <div className="flex items-baseline justify-between gap-3 mb-1">
-        <h3 className="font-heading text-base font-semibold text-chocolate">Buy more, share more</h3>
-        <span className="font-body text-[11px] text-chocolate/45">Mix cookies and chinchin</span>
+      <div className="flex items-center gap-4">
+        <div className="shrink-0 w-14 h-14 rounded-full border border-gold/50 bg-ivory flex items-center justify-center">
+          <span className="font-heading text-lg font-semibold text-chocolate">{OFFER.discount * 100}%</span>
+        </div>
+        <div>
+          <h3 className="font-heading text-base font-semibold text-chocolate">Buy {OFFER.minJars} jars, save {OFFER.discount * 100}%</h3>
+          <p className="font-body text-xs text-chocolate/60 mt-0.5">Mix any sizes of cookies and chinchin. The saving applies to your whole order.</p>
+        </div>
       </div>
-      <p className="font-body text-xs text-chocolate/55 mb-4">The more jars in your basket, the more you save on the whole order.</p>
-      <div className="grid grid-cols-3 gap-2">
-        {BULK_TIERS.map(t => {
-          const active = totalItems >= t.minJars
-          return (
-            <div
-              key={t.minJars}
-              className={`rounded-lg border px-2 py-3 text-center transition-colors ${
-                active ? 'border-gold bg-gold/15' : 'border-gold/25 bg-ivory'
-              }`}
-            >
-              <div className="font-heading text-lg font-semibold text-chocolate leading-none">{t.discount * 100}%</div>
-              <div className="font-body text-[11px] text-chocolate/60 mt-1">{t.minJars}+ jars</div>
-            </div>
-          )
-        })}
+      <div className="mt-4">
+        <div className="h-1.5 rounded-full bg-gold/15 overflow-hidden">
+          <div className="h-full bg-gold transition-all duration-500" style={{ width: `${progress * 100}%` }} />
+        </div>
+        <p className="font-body text-[11px] text-chocolate/55 mt-1.5">
+          {reached
+            ? `Your basket has ${totalItems} jars, so you're saving ${OFFER.discount * 100}%.`
+            : `${totalItems} of ${OFFER.minJars} jars in your basket`}
+        </p>
       </div>
-      <p className="font-body text-xs text-chocolate/55 mt-4">
-        Ordering {WHOLESALE_MIN_JARS}+ jars for an event, shop or office?{' '}
-        <Link href="/wholesale" className="text-rose-red font-semibold underline underline-offset-2 hover:text-rose-red-dark">
-          Ask for a wholesale quote
-        </Link>
-      </p>
+      {FEATURES.wholesale && (
+        <p className="font-body text-xs text-chocolate/55 mt-4">
+          Ordering {WHOLESALE_MIN_JARS}+ jars for an event, shop or office?{' '}
+          <Link href="/wholesale" className="text-rose-red font-semibold underline underline-offset-2 hover:text-rose-red-dark">
+            Ask for a wholesale quote
+          </Link>
+        </p>
+      )}
     </div>
   )
 }
 
-// Short nudge for the cart: progress to the next tier.
+// Cart nudge: how many more jars unlock the saving.
 export function BulkNudge() {
   const { totalItems, discountRate } = useCart()
   const next = nextTier(totalItems)
@@ -54,15 +59,15 @@ export function BulkNudge() {
         <>
           Add <strong className="text-chocolate">{next.minJars - totalItems} more jar{next.minJars - totalItems !== 1 ? 's' : ''}</strong> to save{' '}
           <strong className="text-chocolate">{next.discount * 100}%</strong> on your whole order.
-          {discountRate > 0 && <> You&apos;re already saving {discountRate * 100}%.</>}
         </>
       ) : (
         <>
-          You&apos;re saving our best bulk rate of <strong className="text-chocolate">{discountRate * 100}%</strong>.{' '}
-          {totalItems >= WHOLESALE_MIN_JARS ? (
-            <Link href="/wholesale" className="text-rose-red font-semibold underline underline-offset-2">Talk to us about wholesale pricing.</Link>
-          ) : (
-            <>Need {WHOLESALE_MIN_JARS}+ jars? <Link href="/wholesale" className="text-rose-red font-semibold underline underline-offset-2">Get a wholesale quote.</Link></>
+          You&apos;re saving <strong className="text-chocolate">{discountRate * 100}%</strong> on this order.
+          {FEATURES.wholesale && totalItems >= WHOLESALE_MIN_JARS && (
+            <>
+              {' '}
+              <Link href="/wholesale" className="text-rose-red font-semibold underline underline-offset-2">Talk to us about wholesale pricing.</Link>
+            </>
           )}
         </>
       )}

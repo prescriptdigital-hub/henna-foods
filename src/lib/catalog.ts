@@ -13,38 +13,55 @@ export const CURRENCIES: { code: Currency; symbol: string; label: string; locale
 
 export const DEFAULT_CURRENCY: Currency = 'NGN'
 
-export type ProductId = 'bukkies-cookies' | 'richie-chinchin'
+// Each jar size is its own item (SKU) in the cart.
+export type ProductId = 'bukkies-cookies-900g' | 'bukkies-cookies-600g' | 'richie-chinchin-750g' | 'richie-chinchin-500g'
+export type ProductLine = 'cookies' | 'chinchin'
 
 export type Product = {
   id: ProductId
+  line: ProductLine
   name: string
   shortName: string
+  size: string
   weight: string
   href: string
   image: string
-  // Placeholder prices per jar. Replace with real prices before launch.
+  // Naira prices are the real prices. Pound and dollar prices are placeholders
+  // for display only (orders are charged in naira) until real ones are supplied.
   prices: Record<Currency, number>
 }
 
+const sku = (
+  id: ProductId,
+  line: ProductLine,
+  size: string,
+  prices: Record<Currency, number>
+): Product => ({
+  id,
+  line,
+  size,
+  weight: `${size} jar`,
+  prices,
+  ...(line === 'cookies'
+    ? { name: "Bukkie's Premium Cookies", shortName: "Bukkie's Cookies", href: '/cookies', image: '/images/products/cookies-label.jpg' }
+    : { name: 'Richie Premium Chinchin', shortName: 'Richie Chinchin', href: '/chinchin', image: '/images/products/chinchin-label.jpg' }),
+})
+
 export const PRODUCTS: Record<ProductId, Product> = {
-  'bukkies-cookies': {
-    id: 'bukkies-cookies',
-    name: "Bukkie's Premium Cookies",
-    shortName: "Bukkie's Cookies",
-    weight: '950g jar',
-    href: '/cookies',
-    image: '/images/products/cookies-label.jpg',
-    prices: { NGN: 12500, GBP: 12.99, USD: 15.99 },
-  },
-  'richie-chinchin': {
-    id: 'richie-chinchin',
-    name: 'Richie Premium Chinchin',
-    shortName: 'Richie Chinchin',
-    weight: '500g jar',
-    href: '/chinchin',
-    image: '/images/products/chinchin-label.jpg',
-    prices: { NGN: 7500, GBP: 9.99, USD: 11.99 },
-  },
+  'bukkies-cookies-900g': sku('bukkies-cookies-900g', 'cookies', '900g', { NGN: 8500, GBP: 12.99, USD: 15.99 }),
+  'bukkies-cookies-600g': sku('bukkies-cookies-600g', 'cookies', '600g', { NGN: 6200, GBP: 9.49, USD: 11.49 }),
+  'richie-chinchin-750g': sku('richie-chinchin-750g', 'chinchin', '750g', { NGN: 5800, GBP: 11.99, USD: 14.49 }),
+  'richie-chinchin-500g': sku('richie-chinchin-500g', 'chinchin', '500g', { NGN: 4400, GBP: 8.99, USD: 10.99 }),
+}
+
+// Sizes offered per product, largest first (the default selection)
+export const PRODUCT_LINES: Record<ProductLine, ProductId[]> = {
+  cookies: ['bukkies-cookies-900g', 'bukkies-cookies-600g'],
+  chinchin: ['richie-chinchin-750g', 'richie-chinchin-500g'],
+}
+
+export function lowestPrice(line: ProductLine, currency: Currency) {
+  return Math.min(...PRODUCT_LINES[line].map(id => PRODUCTS[id].prices[currency]))
 }
 
 export function isProductId(id: unknown): id is ProductId {
@@ -56,14 +73,12 @@ export function isCurrency(c: unknown): c is Currency {
 }
 
 // Bulk pricing: the discount applies to the whole order once the total jar
-// count (any mix of cookies and chinchin) reaches a tier.
+// count (any mix of sizes, cookies and chinchin) reaches a tier.
 export const BULK_TIERS = [
-  { minJars: 6, discount: 0.1, label: 'Sharing' },
-  { minJars: 12, discount: 0.15, label: 'Celebration' },
-  { minJars: 24, discount: 0.2, label: 'Party' },
+  { minJars: 5, discount: 0.05, label: 'Sharing' },
 ] as const
 
-// Orders above this are best handled as a wholesale quote.
+// Orders above this are best handled as a wholesale quote (when wholesale is on).
 export const WHOLESALE_MIN_JARS = 50
 
 export function tierFor(jars: number) {

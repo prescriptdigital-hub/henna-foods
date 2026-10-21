@@ -7,7 +7,7 @@ import { useCart } from '@/context/CartContext'
 import { CONTACT } from '@/lib/site'
 
 const topics = [
-  { label: 'Bulk or wholesale order', text: "Hello Henna Foods, I'd like to ask about a bulk order." },
+  { label: 'Bulk order', text: "Hello Henna Foods, I'd like to ask about a bulk order." },
   { label: 'Delivery', text: 'Hello Henna Foods, I have a question about delivery.' },
   { label: 'My order', text: 'Hello Henna Foods, I have a question about my order.' },
   { label: 'Gifting', text: "Hello Henna Foods, I'd love to send Henna treats as a gift." },
@@ -93,7 +93,7 @@ export default function LiveChat() {
           <form onSubmit={send} className="p-5 -mt-3 rounded-t-3xl bg-ivory relative">
             <div className="rounded-2xl rounded-tl-md bg-cream border border-gold/25 px-4 py-3 mb-4 max-w-[90%]">
               <p className="font-body text-sm text-chocolate/80 leading-relaxed">
-                Welcome to Henna Foods. Ask us about orders, delivery, gifting or bulk prices and we&apos;ll reply on WhatsApp.
+                Welcome to Henna Foods. Ask us about orders, delivery, gifting or bulk orders and we&apos;ll reply on WhatsApp.
               </p>
             </div>
 
@@ -152,7 +152,7 @@ export default function LiveChat() {
           onClick={() => setOpen(true)}
           className="max-w-[240px] text-left rounded-2xl rounded-br-md bg-ivory border border-gold/40 shadow-card px-4 py-3 font-body text-sm text-chocolate animate-fade-up"
         >
-          Planning a celebration? Ask us about bulk prices.
+          Buying 5 jars or more? You save 5%. Ask us anything.
         </button>
       )}
 

@@ -1,18 +1,18 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Badge from './Badge'
 import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
-import { PRODUCTS, type ProductId } from '@/lib/catalog'
+import { PRODUCT_LINES, PRODUCTS, type ProductId } from '@/lib/catalog'
+import SizePicker from './SizePicker'
 
 type ProductCardProps = {
-  id: ProductId
   name: string
   tagline: string
   description: string
-  weight: string
   href: string
   badge?: string
   rating?: number
@@ -36,11 +36,9 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 }
 
 export default function ProductCard({
-  id,
   name,
   tagline,
   description,
-  weight,
   href,
   badge,
   rating = 4.9,
@@ -49,7 +47,8 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { addItem } = useCart()
   const { currency, format } = useCurrency()
-  const product = PRODUCTS[id]
+  const [sku, setSku] = useState<ProductId>(PRODUCT_LINES[variant][0])
+  const product = PRODUCTS[sku]
 
   const photos = {
     cookies: { src: '/images/products/cookies-label.jpg', alt: "Bukkie's Premium Cookies jar with gold ribbon" },
@@ -88,9 +87,6 @@ export default function ProductCard({
               {name}
             </h3>
           </Link>
-          <span className="font-body text-xs text-chocolate/50 bg-gold/10 border border-gold/25 rounded-pill px-2 py-0.5 whitespace-nowrap shrink-0">
-            {weight}
-          </span>
         </div>
 
         <StarRating rating={rating} count={reviewCount} />
@@ -99,6 +95,10 @@ export default function ProductCard({
           {description}
         </p>
 
+        <div className="mt-4">
+          <SizePicker line={variant} value={sku} onChange={setSku} compact />
+        </div>
+
         <div className="mt-5 pt-4 border-t border-gold/20 flex items-center justify-between gap-3">
           <div>
             <span className="font-heading text-2xl font-semibold text-chocolate">
@@ -106,7 +106,7 @@ export default function ProductCard({
             </span>
           </div>
           <button
-            onClick={() => addItem(id)}
+            onClick={() => addItem(sku)}
             className="btn-primary text-xs px-5 py-2.5"
           >
             Add to Cart

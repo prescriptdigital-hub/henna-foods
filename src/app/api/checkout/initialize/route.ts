@@ -79,7 +79,7 @@ export async function POST(req: Request) {
   const reference = `HF-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase()
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin
 
-  const itemSummary = lines.map(l => `${l.quantity} x ${PRODUCTS[l.id].name}`).join(', ')
+  const itemSummary = lines.map(l => `${l.quantity} x ${PRODUCTS[l.id].name} ${PRODUCTS[l.id].size}`).join(', ')
   const deliveryAddress = [customer.address, customer.city, customer.region, customer.country].filter(Boolean).join(', ')
 
   try {

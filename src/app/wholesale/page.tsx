@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { FEATURES } from '@/lib/site'
 import { BULK_TIERS, WHOLESALE_MIN_JARS } from '@/lib/catalog'
 import WholesaleForm from './WholesaleForm'
 
@@ -40,6 +42,8 @@ const occasions = [
 ]
 
 export default function WholesalePage() {
+  if (!FEATURES.wholesale) redirect('/shop')
+
   return (
     <>
       <section className="relative overflow-hidden bg-ivory border-b border-gold/20">

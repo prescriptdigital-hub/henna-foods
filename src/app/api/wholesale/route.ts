@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { FEATURES } from '@/lib/site'
 
 // Wholesale enquiries are emailed through Resend (https://resend.com) when
 // RESEND_API_KEY and WHOLESALE_EMAIL_TO are set. Without them the form falls
@@ -8,6 +9,7 @@ const text = (v: unknown, max = 500) => (typeof v === 'string' ? v.trim().slice(
 const escape = (s: string) => s.replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`)
 
 export async function POST(req: Request) {
+  if (!FEATURES.wholesale) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   const b = (await req.json().catch(() => ({}))) as Record<string, unknown>
   const enquiry = {
     name: text(b.name, 120),

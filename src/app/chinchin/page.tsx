@@ -8,7 +8,8 @@ import Newsletter from '@/components/Newsletter'
 import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
 import { BulkTierTable } from '@/components/BulkSavings'
-import { PRODUCTS } from '@/lib/catalog'
+import { PRODUCT_LINES, PRODUCTS, type ProductId } from '@/lib/catalog'
+import SizePicker from '@/components/SizePicker'
 
 const benefits = [
   { icon: 'star', text: 'Perfect crunchy texture every time' },
@@ -20,9 +21,10 @@ const benefits = [
 export default function ChinchinPage() {
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
-  const { addItem } = useCart()
+  const { addItem, closeCart } = useCart()
   const { currency, format } = useCurrency()
-  const product = PRODUCTS['richie-chinchin']
+  const [sku, setSku] = useState<ProductId>(PRODUCT_LINES.chinchin[0])
+  const product = PRODUCTS[sku]
 
   const images = [
     { src: '/images/products/chinchin-label.jpg', label: 'Richie jar with gold ribbon and label' },
@@ -95,7 +97,12 @@ export default function ChinchinPage() {
 
               <div className="flex items-baseline gap-3 mb-6">
                 <span className="font-heading text-4xl font-semibold text-chocolate">{format(product.prices[currency])}</span>
-                <span className="font-body text-sm text-chocolate/40">per jar</span>
+                <span className="font-body text-sm text-chocolate/45">per {product.weight}</span>
+              </div>
+
+              <div className="mb-6">
+                <span className="font-body text-sm font-medium text-chocolate/70 block mb-2.5">Choose your jar</span>
+                <SizePicker line="chinchin" value={sku} onChange={setSku} />
               </div>
 
               <p className="font-body text-base text-chocolate/70 leading-relaxed mb-8">
@@ -122,17 +129,24 @@ export default function ChinchinPage() {
                       +
                     </button>
                   </div>
-                  <span className="font-body text-xs text-chocolate/40">500g per jar</span>
+                  <span className="font-body text-xs text-chocolate/40">{product.size} per jar</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => addItem('richie-chinchin', quantity)}
+                    onClick={() => addItem(sku, quantity)}
                     className="btn-primary flex-1 justify-center"
                   >
                     Add joy to your cart
                   </button>
-                  <Link href="/checkout" className="btn-accent flex-1 justify-center text-center">
+                  <Link
+                    href="/checkout"
+                    onClick={() => {
+                      addItem(sku, quantity)
+                      closeCart()
+                    }}
+                    className="btn-accent flex-1 justify-center text-center"
+                  >
                     Buy Now
                   </Link>
                 </div>

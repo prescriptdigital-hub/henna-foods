@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import HennaLogo from './HennaLogo'
 import CurrencySwitcher from './CurrencySwitcher'
+import { FEATURES } from '@/lib/site'
 import { useCart } from '@/context/CartContext'
 
 const navLinks = [
   { label: 'Shop', href: '/shop' },
   { label: 'Cookies', href: '/cookies' },
   { label: 'Chinchin', href: '/chinchin' },
-  { label: 'Wholesale', href: '/wholesale' },
+  ...(FEATURES.wholesale ? [{ label: 'Wholesale', href: '/wholesale' }] : []),
   { label: 'Gallery', href: '/gallery' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },

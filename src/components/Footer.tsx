@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import HennaLogo from './HennaLogo'
+import { FEATURES } from '@/lib/site'
 
 const shopLinks = [
   { label: "Bukkie's Cookies", href: '/cookies' },
   { label: 'Richie Chinchin', href: '/chinchin' },
   { label: 'All Products', href: '/shop' },
-  { label: 'Bulk & Wholesale', href: '/wholesale' },
+  ...(FEATURES.wholesale ? [{ label: 'Bulk & Wholesale', href: '/wholesale' }] : []),
 ]
 
 const aboutLinks = [

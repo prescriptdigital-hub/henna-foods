@@ -211,11 +211,9 @@ function ProductShowcaseSection() {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <ProductCard
-            id="bukkies-cookies"
             name="Bukkie's Premium Cookies"
             tagline="Rich. Buttery. Unforgettable."
             description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat."
-            weight="950g jar"
             href="/cookies"
             badge="Best Seller"
             rating={4.9}
@@ -223,11 +221,9 @@ function ProductShowcaseSection() {
             variant="cookies"
           />
           <ProductCard
-            id="richie-chinchin"
             name="Richie Premium Chinchin"
             tagline="Crunchy. Joyful. Delicious."
             description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Pure joy in every bite."
-            weight="500g jar"
             href="/chinchin"
             badge="New"
             rating={4.8}
@@ -389,11 +385,9 @@ function FeaturedProductsSection() {
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl">
           <ProductCard
-            id="bukkies-cookies"
             name="Bukkie's Premium Cookies"
             tagline="Rich. Buttery. Unforgettable."
             description="Made with fine ingredients, rich butter goodness, baked to perfection, and perfect for gifting and sharing."
-            weight="950g jar"
             href="/cookies"
             badge="Best Seller"
             rating={4.9}
@@ -401,11 +395,9 @@ function FeaturedProductsSection() {
             variant="cookies"
           />
           <ProductCard
-            id="richie-chinchin"
             name="Richie Premium Chinchin"
             tagline="Crunchy. Joyful. Delicious."
             description="Perfect crunchy texture, joyful snack for every moment, great for gifting and parties, made with care."
-            weight="500g jar"
             href="/chinchin"
             rating={4.8}
             reviewCount={167}

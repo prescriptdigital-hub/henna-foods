@@ -6,3 +6,9 @@ export const CONTACT = {
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, '') || '',
   replyTime: 'We usually reply within an hour',
 }
+
+// Switch whole site features on or off.
+export const FEATURES = {
+  // Wholesale page, quote form and links. Off for now; set to true to bring it back.
+  wholesale: false,
+}

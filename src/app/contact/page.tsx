@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import LineIcon from '@/components/LineIcon'
+import DeliveryRates from '@/components/DeliveryRates'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
@@ -119,8 +120,9 @@ export default function ContactPage() {
               </div>
 
               <div id="shipping" className="p-6 bg-ivory rounded-2xl border border-gold/20">
-                <h3 className="font-heading text-lg font-semibold text-chocolate mb-3">Shipping</h3>
-                <p className="font-body text-sm text-chocolate/65 leading-relaxed">Standard delivery takes 2-3 business days. Free delivery on selected orders. All orders are carefully packed to ensure your treats arrive in perfect condition.</p>
+                <h3 className="font-heading text-lg font-semibold text-chocolate mb-3">Delivery areas and fees</h3>
+                <p className="font-body text-sm text-chocolate/65 leading-relaxed mb-5">We deliver across Lagos in 2 to 3 business days, with every jar carefully packed so your treats arrive perfect. Your fee is added at checkout once you choose your area.</p>
+                <DeliveryRates />
               </div>
 
               <div id="returns" className="p-6 bg-ivory rounded-2xl border border-gold/20">

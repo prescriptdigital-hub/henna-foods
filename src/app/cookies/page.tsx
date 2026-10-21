@@ -170,7 +170,7 @@ export default function CookiesPage() {
 
               <div className="flex items-center gap-6 mt-6 pt-6 border-t border-gold/20">
                 {[
-                  { icon: 'truck' as const, label: 'Shipping', detail: '2-3 business days' },
+                  { icon: 'truck' as const, label: 'Lagos delivery', detail: '2-3 business days' },
                   { icon: 'return' as const, label: 'Returns', detail: '7-day return policy' },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-2">

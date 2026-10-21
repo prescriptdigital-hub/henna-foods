@@ -98,9 +98,3 @@ export function formatMoney(amount: number, currency: Currency) {
     maximumFractionDigits: currency === 'NGN' ? 0 : 2,
   }).format(amount)
 }
-
-// Paystack can always charge naira. Dollars only work once Paystack has
-// enabled USD on the merchant account. Pounds are display-only.
-export function chargeCurrencyFor(display: Currency, usdEnabled: boolean): Currency {
-  return display === 'USD' && usdEnabled ? 'USD' : 'NGN'
-}

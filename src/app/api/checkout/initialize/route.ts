@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import {
   cartTotals,
-  chargeCurrencyFor,
   formatMoney,
   isCurrency,
   isProductId,
@@ -9,11 +8,13 @@ import {
   type LineInput,
   type ProductId,
 } from '@/lib/catalog'
-import { paystackConfigured, paystackRequest, usdEnabled } from '@/lib/paystack'
+import { paystackConfigured, paystackRequest } from '@/lib/paystack'
+import { DELIVERY_COUNTRY, deliveryAreaById } from '@/lib/delivery'
 
 type Body = {
   items?: unknown
   currency?: unknown
+  deliveryAreaId?: unknown
   customer?: Record<string, unknown>
 }
 
@@ -60,9 +61,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Please complete your name, email, phone and delivery address.' }, { status: 400 })
   }
 
+  // Delivery is priced in naira per Lagos area; anything else is quoted by the team
+  const area = deliveryAreaById(body.deliveryAreaId)
+  if (customer.country !== DELIVERY_COUNTRY || !area || area.fee === null) {
+    return NextResponse.json(
+      { error: "Delivery to this area is quoted on request. Please contact us and we'll send you a payment link." },
+      { status: 400 }
+    )
+  }
+  customer.city = area.name
+
   const displayCurrency = isCurrency(body.currency) ? body.currency : 'NGN'
-  const currency = chargeCurrencyFor(displayCurrency, usdEnabled())
+  // Delivery fees are in naira, so orders are charged in naira
+  const currency = 'NGN' as const
   const totals = cartTotals(lines, currency)
+  const amount = totals.total + area.fee
   const reference = `HF-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase()
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin
 
@@ -74,12 +87,14 @@ export async function POST(req: Request) {
       method: 'POST',
       body: {
         email: customer.email,
-        amount: Math.round(totals.total * 100), // kobo / cents
+        amount: Math.round(amount * 100), // kobo
         currency,
         reference,
         callback_url: `${origin}/thank-you`,
         metadata: {
           items: lines,
+          delivery_area: area.name,
+          delivery_fee: area.fee,
           display_currency: displayCurrency,
           customer,
           // custom_fields show on the transaction in the Paystack dashboard
@@ -88,6 +103,7 @@ export async function POST(req: Request) {
             { display_name: 'Phone', variable_name: 'phone', value: customer.phone },
             { display_name: 'Items', variable_name: 'items', value: itemSummary },
             { display_name: 'Delivery address', variable_name: 'delivery_address', value: deliveryAddress },
+            { display_name: 'Delivery fee', variable_name: 'delivery_fee', value: `${area.name}: ${formatMoney(area.fee, currency)}` },
             {
               display_name: 'Bulk saving',
               variable_name: 'bulk_saving',

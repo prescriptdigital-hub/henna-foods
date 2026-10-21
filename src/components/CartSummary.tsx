@@ -119,7 +119,7 @@ export default function CartSummary() {
               <span className="font-body text-sm text-chocolate/60">Total</span>
               <span className="font-heading text-lg font-semibold text-chocolate">{format(totalPrice)}</span>
             </div>
-            <p className="font-body text-xs text-chocolate/40 mb-4">Delivery confirmed after ordering</p>
+            <p className="font-body text-xs text-chocolate/40 mb-4">Delivery fee added at checkout</p>
             <Link
               href="/checkout"
               onClick={closeCart}

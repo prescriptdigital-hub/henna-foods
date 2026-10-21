@@ -7,10 +7,6 @@ export function paystackConfigured() {
   return Boolean(process.env.PAYSTACK_SECRET_KEY)
 }
 
-export function usdEnabled() {
-  return process.env.NEXT_PUBLIC_PAYSTACK_USD_ENABLED === 'true'
-}
-
 export async function paystackRequest<T>(path: string, init?: { method?: string; body?: unknown }) {
   const res = await fetch(`${PAYSTACK_API}${path}`, {
     method: init?.method ?? 'GET',

@@ -18,7 +18,7 @@ const aboutLinks = [
 ]
 
 const careLinks = [
-  { label: 'Shipping Info', href: '/contact#shipping' },
+  { label: 'Delivery Fees', href: '/contact#shipping' },
   { label: 'Returns', href: '/contact#returns' },
   { label: 'Cart', href: '/cart' },
 ]

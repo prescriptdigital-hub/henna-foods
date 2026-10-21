@@ -2,17 +2,40 @@
 
 import { useState } from 'react'
 
-export default function Newsletter() {
+// Shared by this section and the footer sign-up
+export function useSubscribe() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
+    if (!email || sending) return
+    setSending(true)
+    setError('')
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error || 'We could not sign you up just now. Please try again.')
       setSubmitted(true)
       setEmail('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'We could not sign you up just now. Please try again.')
+    } finally {
+      setSending(false)
     }
   }
+
+  return { email, setEmail, submitted, sending, error, handleSubmit }
+}
+
+export default function Newsletter() {
+  const { email, setEmail, submitted, sending, error, handleSubmit } = useSubscribe()
 
   return (
     <section className="section-padding" style={{ backgroundColor: '#3B1F10' }}>
@@ -54,11 +77,15 @@ export default function Newsletter() {
               />
               <button
                 type="submit"
-                className="bg-gold text-chocolate font-body text-sm font-semibold tracking-wide rounded-pill px-6 py-3.5 hover:bg-golden-yellow transition-colors duration-150 whitespace-nowrap"
+                disabled={sending}
+                className="bg-gold text-chocolate font-body text-sm font-semibold tracking-wide rounded-pill px-6 py-3.5 hover:bg-golden-yellow transition-colors duration-150 whitespace-nowrap disabled:opacity-60"
               >
-                Subscribe
+                {sending ? 'Joining...' : 'Subscribe'}
               </button>
             </form>
+          )}
+          {error && (
+            <p role="alert" className="font-body text-sm mt-3" style={{ color: '#F4C430' }}>{error}</p>
           )}
 
           <p className="font-body text-xs opacity-40 mt-4" style={{ color: '#FFF4E1' }}>

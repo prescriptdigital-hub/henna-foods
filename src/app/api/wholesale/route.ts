@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server'
 import { FEATURES } from '@/lib/site'
+import { detailsTable, sendEmail, teamInbox, validEmail } from '@/lib/email'
 
-// Wholesale enquiries are emailed through Resend (https://resend.com) when
-// RESEND_API_KEY and WHOLESALE_EMAIL_TO are set. Without them the form falls
-// back to opening the customer's own email app.
+// Wholesale enquiries are emailed to WHOLESALE_EMAIL_TO (or TEAM_EMAIL) through
+// Resend. Without email set up the form falls back to the customer's email app.
 
 const text = (v: unknown, max = 500) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
-const escape = (s: string) => s.replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`)
 
 export async function POST(req: Request) {
   if (!FEATURES.wholesale) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -23,17 +22,14 @@ export async function POST(req: Request) {
     location: text(b.location, 160),
     message: text(b.message, 3000),
   }
-  if (!enquiry.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(enquiry.email)) {
+  if (!enquiry.name || !validEmail(enquiry.email)) {
     return NextResponse.json({ error: 'Please add your name and a valid email.' }, { status: 400 })
   }
 
-  const key = process.env.RESEND_API_KEY
-  const to = process.env.WHOLESALE_EMAIL_TO
-  if (!key || !to) {
-    return NextResponse.json({ fallback: true }, { status: 503 })
-  }
+  const to = teamInbox(process.env.WHOLESALE_EMAIL_TO)
+  if (!to) return NextResponse.json({ fallback: true }, { status: 503 })
 
-  const rows: [string, string][] = [
+  const html = `<h2>New wholesale enquiry</h2>${detailsTable([
     ['Name', enquiry.name],
     ['Business', enquiry.business],
     ['Email', enquiry.email],
@@ -44,26 +40,9 @@ export async function POST(req: Request) {
     ['Needed by', enquiry.date],
     ['Delivery location', enquiry.location],
     ['Message', enquiry.message],
-  ]
-  const html = `<h2>New wholesale enquiry</h2><table cellpadding="6">${rows
-    .filter(([, v]) => v)
-    .map(([k, v]) => `<tr><td><strong>${escape(k)}</strong></td><td>${escape(v).replace(/\n/g, '<br>')}</td></tr>`)
-    .join('')}</table>`
+  ])}`
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: process.env.RESEND_FROM ?? 'Henna Foods <onboarding@resend.dev>',
-      to: to.split(',').map(s => s.trim()),
-      reply_to: enquiry.email,
-      subject: `Wholesale enquiry: ${enquiry.business || enquiry.name}`,
-      html,
-    }),
-  })
-  if (!res.ok) {
-    console.error('Resend failed', res.status, await res.text().catch(() => ''))
-    return NextResponse.json({ fallback: true }, { status: 502 })
-  }
+  const sent = await sendEmail({ to, replyTo: enquiry.email, subject: `Wholesale enquiry: ${enquiry.business || enquiry.name}`, html })
+  if (!sent) return NextResponse.json({ fallback: true }, { status: 502 })
   return NextResponse.json({ ok: true })
 }

@@ -1,16 +1,50 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import LineIcon from '@/components/LineIcon'
 import DeliveryRates from '@/components/DeliveryRates'
+import { CONTACT } from '@/lib/site'
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', website: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Sends through our inbox; if email is not set up yet, hands the message to WhatsApp or the visitor's email app
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
+    if (sending) return
+    setSending(true)
+    setError('')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (res.ok) {
+        setSubmitted(true)
+      } else if (data.fallback) {
+        const body = `${form.message}
+
+${form.name}
+${form.email}`
+        if (CONTACT.whatsapp) {
+          window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(body)}`, '_blank', 'noopener,noreferrer')
+        } else {
+          window.location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent(form.subject || 'Hello Henna Foods')}&body=${encodeURIComponent(body)}`
+        }
+      } else {
+        setError(data.error || 'We could not send your message. Please try again.')
+      }
+    } catch {
+      setError('We could not send your message. Please check your connection and try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -92,8 +126,19 @@ export default function ContactPage() {
                       className="input-henna resize-none"
                     />
                   </div>
-                  <button type="submit" className="btn-primary w-full justify-center">
-                    Send Message
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    value={form.website}
+                    onChange={e => setForm({ ...form, website: e.target.value })}
+                    className="hidden"
+                  />
+                  {error && <p role="alert" className="font-body text-sm text-rose-red">{error}</p>}
+                  <button type="submit" disabled={sending} className="btn-primary w-full justify-center disabled:opacity-60">
+                    {sending ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               )}
@@ -104,8 +149,8 @@ export default function ContactPage() {
                 <h2 className="font-heading text-2xl font-semibold text-chocolate mb-6">Get in touch</h2>
                 <div className="space-y-4">
                   {[
-                    { icon: 'mail' as const, label: 'Email', value: 'hello@hennafoods.com' },
-                    { icon: 'pin' as const, label: 'Location', value: 'United Kingdom' },
+                    { icon: 'mail' as const, label: 'Email', value: CONTACT.email },
+                    { icon: 'pin' as const, label: 'Location', value: CONTACT.location },
                     { icon: 'clock' as const, label: 'Response time', value: 'Within 1-2 business days' },
                   ].map(item => (
                     <div key={item.label} className="flex items-start gap-4 p-4 bg-ivory rounded-xl border border-gold/20">
@@ -126,8 +171,8 @@ export default function ContactPage() {
               </div>
 
               <div id="returns" className="p-6 bg-ivory rounded-2xl border border-gold/20">
-                <h3 className="font-heading text-lg font-semibold text-chocolate mb-3">Returns</h3>
-                <p className="font-body text-sm text-chocolate/65 leading-relaxed">We want you to love every order. If something is not right, contact us within 7 days and we will make it right.</p>
+                <h3 className="font-heading text-lg font-semibold text-chocolate mb-3">Refunds and returns</h3>
+                <p className="font-body text-sm text-chocolate/65 leading-relaxed">We want you to love every jar. If anything arrives damaged or is not what you ordered, tell us within 48 hours of delivery and we will replace it or refund you. <Link href="/refunds" className="underline underline-offset-2 text-chocolate">Read the full policy</Link>.</p>
               </div>
             </div>
           </div>

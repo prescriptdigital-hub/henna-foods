@@ -208,6 +208,11 @@ export default function CheckoutPage() {
                         : 'Choose your delivery area'}
                 </button>
               </div>
+              <p className="font-body text-xs text-chocolate/50 text-center sm:text-right">
+                By paying you agree to our{' '}
+                <Link href="/terms" className="underline underline-offset-2 hover:text-chocolate">Terms of Sale</Link> and{' '}
+                <Link href="/refunds" className="underline underline-offset-2 hover:text-chocolate">Refunds policy</Link>.
+              </p>
             </form>
           </div>
 

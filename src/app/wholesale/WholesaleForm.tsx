@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { CONTACT } from '@/lib/site'
 
-const CONTACT_EMAIL = 'hello@hennafoods.com'
+const CONTACT_EMAIL = CONTACT.email
 const orderTypes = ['Wedding or event', 'Retail / stockist', 'Corporate gifting', 'Party or celebration', 'Other']
 
 const empty = {

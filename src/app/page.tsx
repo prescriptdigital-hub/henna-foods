@@ -37,8 +37,6 @@ function HeroSection() {
         }}
       />
 
-      <PetalDecoration className="absolute top-16 right-8 lg:right-20 opacity-40 rotate-12" size={80} />
-      <PetalDecoration className="absolute bottom-20 left-8 opacity-25 -rotate-20" size={56} />
 
       <div className="container-henna relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center py-20 lg:py-28">
@@ -78,9 +76,9 @@ function HeroSection() {
 
             <div className="flex items-center gap-6 mt-12 pt-8 border-t border-gold/20">
               {[
-                { value: '100%', label: 'Natural ingredients' },
-                { value: '4.9', label: 'Customer rating' },
-                { value: '2K+', label: 'Happy customers' },
+                { value: '2 sizes', label: 'For every table' },
+                { value: '5% off', label: 'When you buy 5 jars' },
+                { value: 'Lagos', label: 'Delivered to your door' },
               ].map(stat => (
                 <div key={stat.label}>
                   <div className="font-heading text-2xl font-semibold text-chocolate">{stat.value}</div>
@@ -216,8 +214,6 @@ function ProductShowcaseSection() {
             description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat."
             href="/cookies"
             badge="Best Seller"
-            rating={4.9}
-            reviewCount={214}
             variant="cookies"
           />
           <ProductCard
@@ -226,8 +222,6 @@ function ProductShowcaseSection() {
             description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Pure joy in every bite."
             href="/chinchin"
             badge="New"
-            rating={4.8}
-            reviewCount={167}
             variant="chinchin"
           />
         </div>
@@ -288,8 +282,8 @@ function BrandStorySection() {
                 className="absolute -top-4 -right-4 rounded-xl px-4 py-3 shadow-soft border"
                 style={{ backgroundColor: '#FFF9EF', borderColor: 'rgba(214, 166, 47, 0.3)' }}
               >
-                <div className="font-heading text-3xl font-semibold text-chocolate leading-none">2K+</div>
-                <div className="font-body text-xs text-chocolate/50 mt-1">Joyful customers</div>
+                <div className="font-heading text-2xl font-semibold text-chocolate leading-none">Gift ready</div>
+                <div className="font-body text-xs text-chocolate/50 mt-1">Every jar tied in gold</div>
               </div>
             </div>
           </div>
@@ -390,8 +384,6 @@ function FeaturedProductsSection() {
             description="Made with fine ingredients, rich butter goodness, baked to perfection, and perfect for gifting and sharing."
             href="/cookies"
             badge="Best Seller"
-            rating={4.9}
-            reviewCount={214}
             variant="cookies"
           />
           <ProductCard
@@ -399,8 +391,6 @@ function FeaturedProductsSection() {
             tagline="Crunchy. Joyful. Delicious."
             description="Perfect crunchy texture, joyful snack for every moment, great for gifting and parties, made with care."
             href="/chinchin"
-            rating={4.8}
-            reviewCount={167}
             variant="chinchin"
           />
         </div>
@@ -409,24 +399,3 @@ function FeaturedProductsSection() {
   )
 }
 
-function PetalDecoration({ className, size }: { className?: string; size: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 80 80"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <g transform="translate(40 40)">
-        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#C41E3A" transform="rotate(-55)" opacity="0.7"/>
-        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#D6A62F" transform="rotate(-22)" opacity="0.7"/>
-        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#F4C430" transform="rotate(12)" opacity="0.7"/>
-        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#F26A3D" transform="rotate(46)" opacity="0.7"/>
-        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#4F9B3A" transform="rotate(78)" opacity="0.7"/>
-        <circle cx="0" cy="0" r="4" fill="#FFF4E1" opacity="0.8"/>
-      </g>
-    </svg>
-  )
-}

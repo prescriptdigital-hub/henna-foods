@@ -8,6 +8,7 @@ import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
 import { PRODUCT_LINES, PRODUCTS, type ProductId } from '@/lib/catalog'
 import SizePicker from './SizePicker'
+import { REVIEWS } from '@/lib/site'
 
 type ProductCardProps = {
   name: string
@@ -15,8 +16,6 @@ type ProductCardProps = {
   description: string
   href: string
   badge?: string
-  rating?: number
-  reviewCount?: number
   variant?: 'cookies' | 'chinchin'
 }
 
@@ -41,14 +40,13 @@ export default function ProductCard({
   description,
   href,
   badge,
-  rating = 4.9,
-  reviewCount = 128,
   variant = 'cookies',
 }: ProductCardProps) {
   const { addItem } = useCart()
   const { format } = useCurrency()
   const [sku, setSku] = useState<ProductId>(PRODUCT_LINES[variant][0])
   const product = PRODUCTS[sku]
+  const reviews = REVIEWS[variant]
 
   const photos = {
     cookies: { src: '/images/products/cookies-label.jpg', alt: "Bukkie's Premium Cookies jar with gold ribbon" },
@@ -89,7 +87,7 @@ export default function ProductCard({
           </Link>
         </div>
 
-        <StarRating rating={rating} count={reviewCount} />
+        {reviews && <StarRating rating={reviews.rating} count={reviews.count} />}
 
         <p className="font-body text-sm text-chocolate/65 leading-relaxed mt-3 flex-1">
           {description}

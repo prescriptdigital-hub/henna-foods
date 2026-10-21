@@ -10,6 +10,7 @@ import { useCurrency } from '@/context/CurrencyContext'
 import { BulkTierTable } from '@/components/BulkSavings'
 import { PRODUCT_LINES, PRODUCTS, type ProductId } from '@/lib/catalog'
 import SizePicker from '@/components/SizePicker'
+import { REVIEWS } from '@/lib/site'
 
 const benefits = [
   { icon: 'star', text: 'Perfect crunchy texture every time' },
@@ -88,12 +89,14 @@ export default function ChinchinPage() {
                 Crunchy. Joyful. Delicious.
               </p>
 
-              <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center gap-0.5">
-                  {[1,2,3,4,5].map(s => <svg key={s} width="15" height="15" viewBox="0 0 24 24" fill={s <= 5 ? '#D6A62F' : 'none'} stroke="#D6A62F" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>)}
+              {REVIEWS.chinchin && (
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center gap-0.5">
+                    {[1, 2, 3, 4, 5].map(s => <svg key={s} width="15" height="15" viewBox="0 0 24 24" fill={s <= Math.round(REVIEWS.chinchin!.rating) ? '#D6A62F' : 'none'} stroke="#D6A62F" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>)}
+                  </div>
+                  <span className="font-body text-sm text-chocolate/50">{REVIEWS.chinchin.rating} ({REVIEWS.chinchin.count} reviews)</span>
                 </div>
-                <span className="font-body text-sm text-chocolate/50">4.8 (167 reviews)</span>
-              </div>
+              )}
 
               <div className="flex items-baseline gap-3 mb-6">
                 <span className="font-heading text-4xl font-semibold text-chocolate">{format(product.price)}</span>

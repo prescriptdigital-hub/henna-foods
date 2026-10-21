@@ -33,8 +33,6 @@ export default function ShopPage() {
               description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting and sharing."
               href="/cookies"
               badge="Best Seller"
-              rating={4.9}
-              reviewCount={214}
               variant="cookies"
             />
             <ProductCard
@@ -43,8 +41,6 @@ export default function ShopPage() {
               description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Joy in every single bite."
               href="/chinchin"
               badge="New"
-              rating={4.8}
-              reviewCount={167}
               variant="chinchin"
             />
           </div>

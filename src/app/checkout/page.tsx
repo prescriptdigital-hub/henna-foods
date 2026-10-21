@@ -31,7 +31,7 @@ export default function CheckoutPage() {
   const needsQuote = !inNigeria || form.area === NOT_LISTED || (area !== undefined && area.fee === null)
   const deliveryFee = needsQuote ? null : area?.fee
   const canPay = !needsQuote && typeof deliveryFee === 'number'
-  const orderTotal = cartTotals(state.items, 'NGN').total + (typeof deliveryFee === 'number' ? deliveryFee : 0)
+  const orderTotal = cartTotals(state.items).total + (typeof deliveryFee === 'number' ? deliveryFee : 0)
 
   const quotePlace = !inNigeria
     ? [form.city, form.country].filter(Boolean).join(', ')
@@ -227,7 +227,7 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <span className="font-body text-sm font-semibold text-chocolate shrink-0">
-                      {formatMoney(item.product.prices.NGN * item.quantity, 'NGN')}
+                      {formatMoney(item.product.price * item.quantity, 'NGN')}
                     </span>
                   </div>
                 ))}

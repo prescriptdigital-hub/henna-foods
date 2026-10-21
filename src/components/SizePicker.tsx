@@ -12,7 +12,7 @@ type Props = {
 
 // Jar size choice, each option showing its price
 export default function SizePicker({ line, value, onChange, compact = false }: Props) {
-  const { currency, format } = useCurrency()
+  const { format } = useCurrency()
 
   return (
     <div role="radiogroup" aria-label="Jar size" className="flex flex-wrap gap-2">
@@ -31,7 +31,7 @@ export default function SizePicker({ line, value, onChange, compact = false }: P
             } ${active ? 'bg-chocolate text-ivory border-chocolate' : 'border-gold/40 text-chocolate hover:bg-gold/10'}`}
           >
             <span className="font-semibold">{p.size}</span>
-            <span className={active ? 'text-ivory/70' : 'text-chocolate/55'}> · {format(p.prices[currency])}</span>
+            <span className={active ? 'text-ivory/70' : 'text-chocolate/55'}> · {format(p.price)}</span>
           </button>
         )
       })}

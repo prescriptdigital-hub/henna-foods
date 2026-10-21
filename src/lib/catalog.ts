@@ -26,42 +26,38 @@ export type Product = {
   weight: string
   href: string
   image: string
-  // Naira prices are the real prices. Pound and dollar prices are placeholders
-  // for display only (orders are charged in naira) until real ones are supplied.
-  prices: Record<Currency, number>
+  // Price per jar in naira. Pound and dollar prices are converted at the
+  // live exchange rate for display; orders are always charged in naira.
+  price: number
 }
 
 const sku = (
   id: ProductId,
   line: ProductLine,
   size: string,
-  prices: Record<Currency, number>
+  price: number
 ): Product => ({
   id,
   line,
   size,
   weight: `${size} jar`,
-  prices,
+  price,
   ...(line === 'cookies'
     ? { name: "Bukkie's Premium Cookies", shortName: "Bukkie's Cookies", href: '/cookies', image: '/images/products/cookies-label.jpg' }
     : { name: 'Richie Premium Chinchin', shortName: 'Richie Chinchin', href: '/chinchin', image: '/images/products/chinchin-label.jpg' }),
 })
 
 export const PRODUCTS: Record<ProductId, Product> = {
-  'bukkies-cookies-900g': sku('bukkies-cookies-900g', 'cookies', '900g', { NGN: 8500, GBP: 12.99, USD: 15.99 }),
-  'bukkies-cookies-600g': sku('bukkies-cookies-600g', 'cookies', '600g', { NGN: 6200, GBP: 9.49, USD: 11.49 }),
-  'richie-chinchin-750g': sku('richie-chinchin-750g', 'chinchin', '750g', { NGN: 5800, GBP: 11.99, USD: 14.49 }),
-  'richie-chinchin-500g': sku('richie-chinchin-500g', 'chinchin', '500g', { NGN: 4400, GBP: 8.99, USD: 10.99 }),
+  'bukkies-cookies-900g': sku('bukkies-cookies-900g', 'cookies', '900g', 8500),
+  'bukkies-cookies-600g': sku('bukkies-cookies-600g', 'cookies', '600g', 6200),
+  'richie-chinchin-750g': sku('richie-chinchin-750g', 'chinchin', '750g', 5800),
+  'richie-chinchin-500g': sku('richie-chinchin-500g', 'chinchin', '500g', 4400),
 }
 
 // Sizes offered per product, largest first (the default selection)
 export const PRODUCT_LINES: Record<ProductLine, ProductId[]> = {
   cookies: ['bukkies-cookies-900g', 'bukkies-cookies-600g'],
   chinchin: ['richie-chinchin-750g', 'richie-chinchin-500g'],
-}
-
-export function lowestPrice(line: ProductLine, currency: Currency) {
-  return Math.min(...PRODUCT_LINES[line].map(id => PRODUCTS[id].prices[currency]))
 }
 
 export function isProductId(id: unknown): id is ProductId {
@@ -91,17 +87,21 @@ export function nextTier(jars: number) {
 
 export type LineInput = { id: ProductId; quantity: number }
 
-export function cartTotals(lines: LineInput[], currency: Currency) {
+// Order totals in naira (the currency every order is charged in)
+export function cartTotals(lines: LineInput[]) {
   const jars = lines.reduce((n, l) => n + l.quantity, 0)
-  const subtotal = lines.reduce((sum, l) => sum + PRODUCTS[l.id].prices[currency] * l.quantity, 0)
+  const subtotal = lines.reduce((sum, l) => sum + PRODUCTS[l.id].price * l.quantity, 0)
   const tier = tierFor(jars)
-  const discount = roundMoney(subtotal * (tier?.discount ?? 0), currency)
-  return { jars, subtotal, tier, discount, total: roundMoney(subtotal - discount, currency) }
+  const discount = Math.round(subtotal * (tier?.discount ?? 0))
+  return { jars, subtotal, tier, discount, total: subtotal - discount }
 }
 
-function roundMoney(amount: number, currency: Currency) {
-  // Naira is shown in whole units; pounds and dollars to the penny/cent.
-  return currency === 'NGN' ? Math.round(amount) : Math.round(amount * 100) / 100
+// What 1 naira is worth in each currency, from the live rates feed
+export type Rates = Record<Currency, number>
+
+export function convertFromNaira(naira: number, currency: Currency, rates: Rates) {
+  if (currency === 'NGN') return naira
+  return Math.round(naira * rates[currency] * 100) / 100
 }
 
 export function formatMoney(amount: number, currency: Currency) {

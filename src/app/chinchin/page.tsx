@@ -22,7 +22,7 @@ export default function ChinchinPage() {
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
   const { addItem, closeCart } = useCart()
-  const { currency, format } = useCurrency()
+  const { format } = useCurrency()
   const [sku, setSku] = useState<ProductId>(PRODUCT_LINES.chinchin[0])
   const product = PRODUCTS[sku]
 
@@ -96,7 +96,7 @@ export default function ChinchinPage() {
               </div>
 
               <div className="flex items-baseline gap-3 mb-6">
-                <span className="font-heading text-4xl font-semibold text-chocolate">{format(product.prices[currency])}</span>
+                <span className="font-heading text-4xl font-semibold text-chocolate">{format(product.price)}</span>
                 <span className="font-body text-sm text-chocolate/45">per {product.weight}</span>
               </div>
 

@@ -74,7 +74,7 @@ export async function POST(req: Request) {
   const displayCurrency = isCurrency(body.currency) ? body.currency : 'NGN'
   // Delivery fees are in naira, so orders are charged in naira
   const currency = 'NGN' as const
-  const totals = cartTotals(lines, currency)
+  const totals = cartTotals(lines)
   const amount = totals.total + area.fee
   const reference = `HF-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase()
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin

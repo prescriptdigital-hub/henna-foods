@@ -133,6 +133,10 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-gold/15 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-body text-xs opacity-50">
             &copy; {new Date().getFullYear()} Henna Foods. All rights reserved.
+            <span className="mx-2">·</span>
+            <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:underline">
+              Rates By Exchange Rate API
+            </a>
           </p>
           <p className="font-body text-xs opacity-50 italic">
             Elegant Taste. Joyful Moments.

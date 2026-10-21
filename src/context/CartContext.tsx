@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useEffect, useReducer, useState } from 'react'
 import { cartTotals, isProductId, PRODUCTS, type Product, type ProductId } from '@/lib/catalog'
-import { useCurrency } from './CurrencyContext'
 
 export type CartItem = {
   id: ProductId
@@ -92,7 +91,6 @@ const STORAGE_KEY = 'henna-cart'
 const CartContext = createContext<CartContextType | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const { currency } = useCurrency()
   const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
   const [loaded, setLoaded] = useState(false)
 
@@ -128,10 +126,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const lines = state.items.map(item => {
     const product = PRODUCTS[item.id]
-    const unitPrice = product.prices[currency]
+    const unitPrice = product.price
     return { ...item, product, unitPrice, lineTotal: unitPrice * item.quantity }
   })
-  const totals = cartTotals(state.items, currency)
+  const totals = cartTotals(state.items)
 
   return (
     <CartContext.Provider

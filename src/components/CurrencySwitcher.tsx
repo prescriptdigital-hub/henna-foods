@@ -4,7 +4,7 @@ import { CURRENCIES } from '@/lib/catalog'
 import { useCurrency } from '@/context/CurrencyContext'
 
 export default function CurrencySwitcher({ className = '' }: { className?: string }) {
-  const { currency, setCurrency } = useCurrency()
+  const { currency, setCurrency, ratesReady } = useCurrency()
 
   return (
     <div
@@ -17,10 +17,11 @@ export default function CurrencySwitcher({ className = '' }: { className?: strin
           key={c.code}
           role="radio"
           aria-checked={currency === c.code}
-          title={c.label}
+          title={c.code === 'NGN' || ratesReady ? c.label : `${c.label} (loading exchange rate)`}
+          disabled={c.code !== 'NGN' && !ratesReady}
           onClick={() => setCurrency(c.code)}
           className={`font-body text-xs font-semibold rounded-pill px-2.5 py-1 transition-colors duration-150 ${
-            currency === c.code ? 'bg-chocolate text-ivory' : 'text-chocolate/60 hover:text-chocolate'
+            currency === c.code ? 'bg-chocolate text-ivory' : 'text-chocolate/60 hover:text-chocolate disabled:opacity-40 disabled:cursor-not-allowed'
           }`}
         >
           {c.symbol}

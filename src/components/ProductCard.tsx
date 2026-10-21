@@ -46,7 +46,7 @@ export default function ProductCard({
   variant = 'cookies',
 }: ProductCardProps) {
   const { addItem } = useCart()
-  const { currency, format } = useCurrency()
+  const { format } = useCurrency()
   const [sku, setSku] = useState<ProductId>(PRODUCT_LINES[variant][0])
   const product = PRODUCTS[sku]
 
@@ -102,7 +102,7 @@ export default function ProductCard({
         <div className="mt-5 pt-4 border-t border-gold/20 flex items-center justify-between gap-3">
           <div>
             <span className="font-heading text-2xl font-semibold text-chocolate">
-              {format(product.prices[currency])}
+              {format(product.price)}
             </span>
           </div>
           <button

@@ -17,11 +17,11 @@ type Props = {
 
 export default function OrderTotals({ size = 'md', currency: override, deliveryFee, deliveryLabel, pendingText = 'Calculated at checkout' }: Props) {
   const { state } = useCart()
-  const { currency: display } = useCurrency()
-  const currency = override ?? display
-  const { jars, subtotal, discount, tier, total } = cartTotals(state.items, currency)
-  const fee = typeof deliveryFee === 'number' && currency === 'NGN' ? deliveryFee : 0
-  const format = (n: number) => formatMoney(n, currency)
+  const { format: formatShown, currency: shown } = useCurrency()
+  const { jars, subtotal, discount, tier, total } = cartTotals(state.items)
+  const fee = typeof deliveryFee === 'number' ? deliveryFee : 0
+  // Amounts are naira; show them in naira when forced (checkout), otherwise in the visitor's currency
+  const format = (naira: number) => (override === 'NGN' ? formatMoney(naira, 'NGN') : formatShown(naira))
 
   return (
     <div>
@@ -53,6 +53,11 @@ export default function OrderTotals({ size = 'md', currency: override, deliveryF
           {format(total + fee)}
         </span>
       </div>
+      {override !== 'NGN' && shown !== 'NGN' && (
+        <p className="font-body text-[11px] text-chocolate/45 mt-2">
+          Converted at today&apos;s exchange rate. Orders are paid in naira: {formatMoney(total + fee, 'NGN')}.
+        </p>
+      )}
     </div>
   )
 }

@@ -30,7 +30,7 @@ export default function ShopPage() {
             <ProductCard
               name="Bukkie's Premium Cookies"
               tagline="Rich. Buttery. Unforgettable."
-              description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting and sharing."
+              description="Golden-baked butter cookies, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting and sharing."
               href="/cookies"
               badge="Best Seller"
               variant="cookies"

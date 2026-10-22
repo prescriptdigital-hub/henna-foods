@@ -211,7 +211,7 @@ function ProductShowcaseSection() {
           <ProductCard
             name="Bukkie's Premium Cookies"
             tagline="Rich. Buttery. Unforgettable."
-            description="Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat."
+            description="Golden-baked butter cookies, crafted with premium ingredients for a warm, joyful treat."
             href="/cookies"
             badge="Best Seller"
             variant="cookies"

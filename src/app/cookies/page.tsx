@@ -117,7 +117,7 @@ export default function CookiesPage() {
               </div>
 
               <p className="font-body text-base text-chocolate/70 leading-relaxed mb-8">
-                Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting, sharing, or those quiet moments when you deserve something beautiful.
+                Golden-baked butter cookies, crafted with premium ingredients for a warm, joyful treat. Perfect for gifting, sharing, or those quiet moments when you deserve something beautiful.
               </p>
 
               <div className="border-t border-gold/20 pt-6 mb-8">
@@ -182,7 +182,7 @@ export default function CookiesPage() {
               <div className="rounded-xl p-5 border border-gold/20 bg-cream">
                 <h3 className="font-heading text-sm font-semibold text-chocolate mb-3">Ingredients</h3>
                 <p className="font-body text-xs text-chocolate/60 leading-relaxed">
-                  Premium butter, fine wheat flour, free-range eggs, cane sugar, chocolate chips, vanilla extract, baking powder, sea salt. Made in a facility that handles nuts and dairy.
+                  Premium butter, fine wheat flour, free-range eggs, cane sugar, vanilla extract, baking powder, sea salt. Made in a facility that handles nuts and dairy.
                 </p>
               </div>
 

@@ -58,7 +58,7 @@ No pink anywhere. The romantic red in this brand is a deep satin **Rose Red** (f
 | Deep Chocolate Brown | `#3B1F10` | Headings, body text, product names, footer, contrast |
 
 ### Bukkie's (cookies) secondary
-Cookie Brown `#A65F2B` · Chocolate Chip Brown `#4B2413` · Rose Red `#C41E3A` · Ivory Rose `#FFF6EC` · Butter Cream `#FBE6C4` · Premium Gold `#C89B2C`
+Cookie Brown `#A65F2B` · Deep Cocoa Brown `#4B2413` · Rose Red `#C41E3A` · Ivory Rose `#FFF6EC` · Butter Cream `#FBE6C4` · Premium Gold `#C89B2C`
 
 ### Richie (chinchin) secondary
 Golden Crunch `#E8A735` · Golden Yellow `#F4C430` · Warm Orange `#F28A2E` · Toasted Brown `#8A4B1F` · Fresh Green Accent `#4F9A3D` · Cream Base `#FFF3D8`
@@ -158,14 +158,14 @@ Four cards: Made with Love · Premium Ingredients · Baked to Perfection · Joy 
 ### Product page layout
 **Left:** large image gallery (packaging, food close-up, lifestyle). **Right:** name, tagline, price, quantity selector, Add to Cart, Buy Now, benefits, ingredients, shipping info.
 
-**Bukkie's copy:** "Bukkie's Premium Cookies — Rich. Buttery. Unforgettable. Golden-baked cookies with delicious chocolate chips, crafted with premium ingredients for a warm, joyful treat." Benefits: made with fine ingredients · rich butter goodness · baked to perfection · perfect for gifting and sharing.
+**Bukkie's copy:** "Bukkie's Premium Cookies — Rich. Buttery. Unforgettable. Golden-baked butter cookies, crafted with premium ingredients for a warm, joyful treat." Benefits: made with fine ingredients · rich butter goodness · baked to perfection · perfect for gifting and sharing.
 
 **Richie copy:** "Richie Premium Chinchin — Crunchy. Joyful. Delicious. A golden crunchy snack made for sharing, celebration, and everyday enjoyment." Benefits: perfect crunchy texture · joyful snack for every moment · great for gifting and parties · made with care by Henna Foods.
 
 ## Packaging / label direction
 
 Site should match packaging style.
-- **Bukkie's:** cream/gold/brown + rose-red and ivory accents (no pink), elegant photography, premium seal/badge, deep-red and ivory rose / satin background motifs, chocolate-chip cookie photography; luxury bakery, romantic, giftable feel evoking desire, pleasure, love, and beauty.
+- **Bukkie's:** cream/gold/brown + rose-red and ivory accents (no pink), elegant photography, premium seal/badge, deep-red and ivory rose / satin background motifs, golden butter cookie photography; luxury bakery, romantic, giftable feel evoking desire, pleasure, love, and beauty.
 - **Richie:** cream/gold/golden-yellow/orange/toasted-brown + green accents, crunchy snack imagery, joyful-but-premium, warm African-inspired energy with global presentation, clean packaging-style cards evoking fun, joy, and sharing.
 
 **Label/sticker UI:** circular Henna Foods sticker · rectangular product label · small "Made with Love" sticker · "Premium Quality / Baked Fresh" sticker. Any sticker using the Henna logo must use the official Golden Logo artwork unaltered. No unrelated monograms.
@@ -182,7 +182,7 @@ Site should match packaging style.
 
 ## Photography
 
-**Bukkie's — use:** close-up cookies, stacks, chocolate chips, cream table bg, deep-red and ivory roses, red satin texture, gold accents, glass jars/premium packaging, warm light. **Avoid:** harsh shadows, messy crumbs, cartoon graphics, cheap stock, any pink.
+**Bukkie's — use:** close-up cookies, stacks, cream table bg, deep-red and ivory roses, red satin texture, gold accents, glass jars/premium packaging, warm light. **Avoid:** harsh shadows, messy crumbs, cartoon graphics, cheap stock, any pink.
 
 **Richie — use:** chinchin in bowls, pouring motion, snack packs, celebration table, warm golden-yellow/orange/gold bg, rose-red accents, family sharing, clean styling. **Avoid:** busy patterns, too many colors, plastic-looking food, any pink.
 
@@ -216,7 +216,8 @@ Warm · elegant · joyful · confident · loving · premium. Example phrases: "M
 
 The site must feel like an original, one-of-a-kind premium brand — not a template, not a stock layout, and not something that reads as AI-generated.
 
-- **No long dashes.** Never use em dashes (—) or en dashes (–) in any visible copy, headings, product text, or microcopy. Use commas, periods, or "and" instead. (A normal hyphen in a compound word like "chocolate-chip" is fine.)
+- **No long dashes.** Never use em dashes (—) or en dashes (–) in any visible copy, headings, product text, or microcopy. Use commas, periods, or "and" instead. (A normal hyphen in a compound word like "golden-baked" is fine.)
+- **Bukkie's are butter cookies, not chocolate chip cookies.** Never describe or picture them with chocolate chips.
 - **No "made by AI" tells.** Do not include AI-generated disclaimers, watermarks, placeholder lorem-ipsum left in, generic "As an AI" phrasing, or boilerplate copy. All text should read as genuine human brand writing in the Henna voice.
 - **Be unique.** Avoid cookie-cutter, recognizably-templated section patterns. Use distinctive layouts, custom spacing, considered typographic detail, and original copy so the site looks like a website that hasn't been seen before.
 - Avoid overused AI phrasing and filler ("elevate," "unlock," "in today's world," "look no further," "the perfect blend of"). Write warm, specific, brand-true sentences.

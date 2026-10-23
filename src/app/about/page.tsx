@@ -71,7 +71,7 @@ export default function AboutPage() {
               <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-3xl border border-gold/50" aria-hidden="true" />
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-soft bg-ivory">
                 <Image
-                  src="/images/team/bukola-egwero.jpg"
+                  src="/images/team/bukola-egwero-portrait.jpg"
                   alt="Bukola Egwero, Managing Director of Henna Foods"
                   fill
                   sizes="(min-width: 1024px) 384px, 90vw"

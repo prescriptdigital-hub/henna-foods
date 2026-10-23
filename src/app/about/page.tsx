@@ -60,6 +60,45 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section
+        id="leadership"
+        className="section-padding"
+        style={{ background: 'linear-gradient(135deg, #FFF4E1 0%, #FBE6C4 50%, #FFF4E1 100%)' }}
+      >
+        <div className="container-henna">
+          <div className="grid lg:grid-cols-[0.85fr_1fr] gap-14 lg:gap-20 items-center max-w-5xl mx-auto">
+            <div className="relative max-w-sm mx-auto lg:mx-0 w-full">
+              <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-3xl border border-gold/50" aria-hidden="true" />
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-soft bg-ivory">
+                <Image
+                  src="/images/team/bukola-egwero.jpg"
+                  alt="Bukola Egwero, Managing Director of Henna Foods"
+                  fill
+                  sizes="(min-width: 1024px) 384px, 90vw"
+                  className="object-cover object-top"
+                />
+              </div>
+            </div>
+            <div>
+              <span className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-gold block mb-4">
+                Meet Our Managing Director
+              </span>
+              <h2 className="font-heading text-3xl lg:text-4xl font-semibold text-chocolate leading-tight">
+                Bukola Egwero
+              </h2>
+              <p className="font-heading text-lg italic text-rose-red mt-2 mb-6">Managing Director, Henna Foods</p>
+              <div className="gold-divider mb-6" />
+              <p className="font-body text-base text-chocolate/70 leading-relaxed mb-5">
+                Bukola leads Henna Foods with a simple standard: every jar should be something she would proudly place on her own table or give to someone she loves.
+              </p>
+              <p className="font-body text-base text-chocolate/65 leading-relaxed">
+                From the recipes to the gold ribbon on every lid, she keeps the care, quality and warmth that Henna Foods is known for at the heart of everything we make.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="quality" className="section-padding bg-cream">
         <div className="container-henna">
           <div className="text-center mb-14">

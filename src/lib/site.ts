@@ -11,7 +11,7 @@ export const CONTACT = {
 
 // Social profile links. Icons only show in the footer once a link is filled in.
 export const SOCIAL = {
-  instagram: '',
+  instagram: 'https://www.instagram.com/hennafoods_/',
   facebook: '',
   x: '',
 }

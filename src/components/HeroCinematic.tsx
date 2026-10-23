@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 // Photos used in the hero. Swap these paths to change the jars on show.
 const HERO_PHOTOS = {
-  main: { src: '/images/products/cookies-jar-cutout.png', alt: "Bukkie's Premium Cookies jar tied with gold ribbon" },
-  side: { src: '/images/products/chinchin-jar-cutout.png', alt: 'Richie Premium Chinchin jar tied with gold ribbon' },
+  main: { width: 833, height: 1254, src: '/images/products/cookies-jar-cutout.png', alt: "Bukkie's Premium Cookies jar tied with gold ribbon" },
+  side: { width: 1000, height: 1145, src: '/images/products/chinchin-jar-cutout.png', alt: 'Richie Premium Chinchin jar tied with gold ribbon' },
 }
 
 // Fixed positions so the server and browser render the same drifting petals and sparkles
@@ -148,33 +148,43 @@ export default function HeroCinematic() {
           </div>
 
           <div className="relative flex justify-center lg:justify-end">
-            <div className="relative" style={{ width: 'clamp(250px, 32vw, 420px)', aspectRatio: '1 / 1.12' }}>
+            <div className="relative" style={{ width: 'min(100%, clamp(320px, 44vw, 600px))', aspectRatio: '1.3 / 1' }}>
               <div className="hero-glow" aria-hidden="true" />
               <svg className="hero-ring" viewBox="0 0 200 200" aria-hidden="true">
                 <circle cx="100" cy="100" r="96" fill="none" stroke="#D6A62F" strokeOpacity="0.45" strokeWidth="0.6" strokeDasharray="2 6" />
                 <circle cx="100" cy="100" r="84" fill="none" stroke="#F4C430" strokeOpacity="0.18" strokeWidth="0.4" />
               </svg>
 
-              {/* Main jar */}
-              <div className="hero-pop absolute left-[6%] right-[26%] top-[2%] bottom-[6%]" style={{ '--d': '0.4s' } as React.CSSProperties}>
-                <div className="hero-float relative h-full" style={{ '--float': '7s' } as React.CSSProperties}>
-                  <Image src={HERO_PHOTOS.main.src} alt={HERO_PHOTOS.main.alt} fill priority sizes="(min-width: 1024px) 300px, 60vw" className="object-contain hero-jar" />
-                </div>
-              </div>
-
-              {/* Side jar */}
-              <div className="hero-pop absolute -right-[6%] bottom-[2%] w-[48%] aspect-[1000/1145]" style={{ '--d': '0.7s' } as React.CSSProperties}>
-                <div className="hero-float relative h-full" style={{ '--float': '5.5s', '--float-delay': '-2s' } as React.CSSProperties}>
-                  <Image src={HERO_PHOTOS.side.src} alt={HERO_PHOTOS.side.alt} fill sizes="(min-width: 1024px) 210px, 40vw" className="object-contain hero-jar" />
-                </div>
+              {/* Both jars at the same height, side by side */}
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-center gap-[7%]">
+                <figure className="hero-pop flex flex-col items-center" style={{ width: '34%', '--d': '0.4s' } as React.CSSProperties}>
+                  <div className="hero-float w-full" style={{ '--float': '7s', '--float-delay': '0s' } as React.CSSProperties}>
+                    <Image src={HERO_PHOTOS.main.src} alt={HERO_PHOTOS.main.alt} width={HERO_PHOTOS.main.width} height={HERO_PHOTOS.main.height} priority sizes="(min-width: 1024px) 240px, 42vw" className="hero-jar w-full h-auto" />
+                  </div>
+                  <figcaption className="mt-4 text-center whitespace-nowrap">
+                    <span className="block font-heading text-sm lg:text-base font-semibold" style={{ color: '#FFF4E1' }}>Bukkie&apos;s Cookies</span>
+                    <span className="hidden xl:block font-heading italic text-sm" style={{ color: '#D6A62F' }}>Rich. Buttery. Unforgettable.</span>
+                  </figcaption>
+                </figure>
+                <figure className="hero-pop flex flex-col items-center" style={{ width: '44.7%', '--d': '0.6s' } as React.CSSProperties}>
+                  <div className="hero-float w-full" style={{ '--float': '7s', '--float-delay': '-3.5s' } as React.CSSProperties}>
+                    <Image src={HERO_PHOTOS.side.src} alt={HERO_PHOTOS.side.alt} width={HERO_PHOTOS.side.width} height={HERO_PHOTOS.side.height} priority sizes="(min-width: 1024px) 240px, 42vw" className="hero-jar w-full h-auto" />
+                  </div>
+                  <figcaption className="mt-4 text-center whitespace-nowrap">
+                    <span className="block font-heading text-sm lg:text-base font-semibold" style={{ color: '#FFF4E1' }}>Richie Chinchin</span>
+                    <span className="hidden xl:block font-heading italic text-sm" style={{ color: '#D6A62F' }}>Crunchy. Joyful. Delicious.</span>
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Seal */}
-              <div className="hero-pop absolute left-0 top-[46%]" style={{ '--d': '1s' } as React.CSSProperties}>
-                <div className="hero-seal">
-                  <span className="font-heading italic text-[13px] leading-tight text-center" style={{ color: '#3B1F10' }}>
-                    Freshly<br />baked
-                  </span>
+              <div className="absolute left-1/2 -translate-x-1/2 -top-[6%] z-10">
+                <div className="hero-pop" style={{ '--d': '1s' } as React.CSSProperties}>
+                  <div className="hero-seal">
+                    <span className="font-heading italic text-[13px] leading-tight text-center" style={{ color: '#3B1F10' }}>
+                      Freshly<br />baked
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -8,6 +8,7 @@ import { FEATURES } from '@/lib/site'
 import { useCart } from '@/context/CartContext'
 
 const navLinks = [
+  { label: 'Home', href: '/' },
   { label: 'Shop', href: '/shop' },
   { label: 'Cookies', href: '/cookies' },
   { label: 'Chinchin', href: '/chinchin' },

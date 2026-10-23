@@ -4,13 +4,13 @@ import ProductCard from '@/components/ProductCard'
 import QualityIconCard from '@/components/QualityIconCard'
 import Newsletter from '@/components/Newsletter'
 import KenBurnsShowcase from '@/components/KenBurnsShowcase'
-import HeroCinematic from '@/components/HeroCinematic'
+import HeroSection from '@/components/HeroSection'
 import { GALLERY } from '@/lib/gallery'
 
 export default function HomePage() {
   return (
     <>
-      <HeroCinematic />
+      <HeroSection />
       <ProductShowcaseSection />
       <GalleryShowcaseSection />
       <BrandStorySection />

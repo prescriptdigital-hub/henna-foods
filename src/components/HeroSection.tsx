@@ -36,6 +36,9 @@ export default function HeroSection() {
         }}
       />
 
+      <PetalDecoration className="absolute top-16 right-8 lg:right-20 opacity-40 rotate-12" size={80} />
+      <PetalDecoration className="absolute bottom-20 left-8 opacity-25 -rotate-20" size={56} />
+
       <div className="container-henna relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center py-20 lg:py-28">
           <div className="max-w-xl">
@@ -159,5 +162,27 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
+  )
+}
+
+function PetalDecoration({ className, size }: { className?: string; size: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 80 80"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <g transform="translate(40 40)">
+        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#C41E3A" transform="rotate(-55)" opacity="0.7"/>
+        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#D6A62F" transform="rotate(-22)" opacity="0.7"/>
+        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#F4C430" transform="rotate(12)" opacity="0.7"/>
+        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#F26A3D" transform="rotate(46)" opacity="0.7"/>
+        <ellipse cx="0" cy="-16" rx="6" ry="13" fill="#4F9B3A" transform="rotate(78)" opacity="0.7"/>
+        <circle cx="0" cy="0" r="4" fill="#FFF4E1" opacity="0.8"/>
+      </g>
+    </svg>
   )
 }

@@ -94,7 +94,7 @@ export default function HeroCinematic() {
       </div>
 
       <div className="container-henna relative z-10">
-        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-14 lg:gap-6 items-center py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-14 lg:gap-6 items-center py-16 lg:py-20">
           <div>
             <p className="hero-fade font-body text-xs font-semibold tracking-[0.3em] uppercase mb-7" style={{ color: '#D6A62F', '--d': '0s' } as React.CSSProperties}>
               <span className="inline-block w-10 h-px align-middle mr-3" style={{ background: '#D6A62F' }} />
@@ -103,7 +103,7 @@ export default function HeroCinematic() {
 
             <h1
               className="font-heading font-semibold leading-[0.98] tracking-tight mb-8"
-              style={{ fontSize: 'clamp(42px, 5.8vw, 88px)', color: '#FFF4E1' }}
+              style={{ fontSize: 'clamp(42px, 5.2vw, 80px)', color: '#FFF4E1' }}
             >
               <span className="block sm:whitespace-nowrap">{LINE_ONE.map(w => word(w))}</span>
               <span className="block sm:whitespace-nowrap">{LINE_TWO.map(w => word(w, true))}</span>
@@ -148,7 +148,7 @@ export default function HeroCinematic() {
           </div>
 
           <div className="relative flex justify-center lg:justify-end">
-            <div className="relative" style={{ width: 'min(100%, clamp(320px, 44vw, 600px))', aspectRatio: '1.3 / 1' }}>
+            <div className="relative w-full max-w-[600px] lg:max-w-none pt-20">
               <div className="hero-glow" aria-hidden="true" />
               <svg className="hero-ring" viewBox="0 0 200 200" aria-hidden="true">
                 <circle cx="100" cy="100" r="96" fill="none" stroke="#D6A62F" strokeOpacity="0.45" strokeWidth="0.6" strokeDasharray="2 6" />
@@ -156,19 +156,19 @@ export default function HeroCinematic() {
               </svg>
 
               {/* Both jars at the same height, side by side */}
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-center gap-[7%]">
-                <figure className="hero-pop flex flex-col items-center" style={{ width: '34%', '--d': '0.4s' } as React.CSSProperties}>
+              <div className="relative flex items-end justify-center gap-[5%]">
+                <figure className="hero-pop flex flex-col items-center" style={{ width: '40.5%', '--d': '0.4s' } as React.CSSProperties}>
                   <div className="hero-float w-full" style={{ '--float': '7s', '--float-delay': '0s' } as React.CSSProperties}>
-                    <Image src={HERO_PHOTOS.main.src} alt={HERO_PHOTOS.main.alt} width={HERO_PHOTOS.main.width} height={HERO_PHOTOS.main.height} priority sizes="(min-width: 1024px) 240px, 42vw" className="hero-jar w-full h-auto" />
+                    <Image src={HERO_PHOTOS.main.src} alt={HERO_PHOTOS.main.alt} width={HERO_PHOTOS.main.width} height={HERO_PHOTOS.main.height} priority sizes="(min-width: 1024px) 340px, 50vw" className="hero-jar w-full h-auto" />
                   </div>
                   <figcaption className="mt-4 text-center whitespace-nowrap">
                     <span className="block font-heading text-sm lg:text-base font-semibold" style={{ color: '#FFF4E1' }}>Bukkie&apos;s Cookies</span>
                     <span className="hidden xl:block font-heading italic text-sm" style={{ color: '#D6A62F' }}>Rich. Buttery. Unforgettable.</span>
                   </figcaption>
                 </figure>
-                <figure className="hero-pop flex flex-col items-center" style={{ width: '44.7%', '--d': '0.6s' } as React.CSSProperties}>
+                <figure className="hero-pop flex flex-col items-center" style={{ width: '53.2%', '--d': '0.6s' } as React.CSSProperties}>
                   <div className="hero-float w-full" style={{ '--float': '7s', '--float-delay': '-3.5s' } as React.CSSProperties}>
-                    <Image src={HERO_PHOTOS.side.src} alt={HERO_PHOTOS.side.alt} width={HERO_PHOTOS.side.width} height={HERO_PHOTOS.side.height} priority sizes="(min-width: 1024px) 240px, 42vw" className="hero-jar w-full h-auto" />
+                    <Image src={HERO_PHOTOS.side.src} alt={HERO_PHOTOS.side.alt} width={HERO_PHOTOS.side.width} height={HERO_PHOTOS.side.height} priority sizes="(min-width: 1024px) 340px, 50vw" className="hero-jar w-full h-auto" />
                   </div>
                   <figcaption className="mt-4 text-center whitespace-nowrap">
                     <span className="block font-heading text-sm lg:text-base font-semibold" style={{ color: '#FFF4E1' }}>Richie Chinchin</span>
@@ -178,7 +178,7 @@ export default function HeroCinematic() {
               </div>
 
               {/* Seal */}
-              <div className="absolute left-1/2 -translate-x-1/2 -top-[6%] z-10">
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 z-10">
                 <div className="hero-pop" style={{ '--d': '1s' } as React.CSSProperties}>
                   <div className="hero-seal">
                     <span className="font-heading italic text-[13px] leading-tight text-center" style={{ color: '#3B1F10' }}>

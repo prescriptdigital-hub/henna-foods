@@ -28,10 +28,10 @@ export default function ChinchinPage() {
   const product = PRODUCTS[sku]
 
   const images = [
-    { src: '/images/products/chinchin-label.jpg', label: 'Richie jar with gold ribbon and label' },
-    { src: '/images/products/chinchin-jar.jpg', label: 'A full jar of Richie chinchin' },
-    { src: '/images/products/chinchin-stack.jpg', label: 'Stacked jars of Richie chinchin' },
-    { src: '/images/products/chinchin-trio.jpg', label: 'Richie party multipack' },
+    { src: '/images/products/chinchin-jar.jpg', label: 'A jar of Richie chinchin tied with gold ribbon' },
+    { src: '/images/products/chinchin-bowl.jpg', label: 'Golden Richie chinchin in an ivory bowl' },
+    { src: '/images/products/chinchin-jar-plum.jpg', label: 'A Richie jar on a plum backdrop with chinchin scattered around it' },
+    { src: '/images/products/chinchin-pyramid.jpg', label: 'Three jars of Richie chinchin stacked in a pyramid' },
   ]
 
   return (

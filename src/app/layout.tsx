@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: 'Premium treats crafted to bring joy, love, and elegance to everyday moments.',
     type: 'website',
     siteName: 'Henna Foods',
-    images: [{ url: '/images/products/collection-stack.jpg', width: 1600, height: 1280, alt: "Richie and Bukkie's jars stacked together" }],
+    images: [{ url: '/images/products/duo-warm.jpg', width: 1536, height: 1024, alt: "A jar of Bukkie's cookies beside a jar of Richie chinchin" }],
   },
 }
 

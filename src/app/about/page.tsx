@@ -34,7 +34,7 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
             <div className="relative aspect-square rounded-3xl overflow-hidden shadow-card bg-cream">
               <Image
-                src="/images/products/duo.jpg"
+                src="/images/products/duo-plinth.jpg"
                 alt="A jar of Bukkie's cookies beside a jar of Richie chinchin"
                 fill
                 sizes="(min-width: 1024px) 480px, 100vw"

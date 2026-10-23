@@ -43,8 +43,8 @@ const sku = (
   weight: `${size} jar`,
   price,
   ...(line === 'cookies'
-    ? { name: "Bukkie's Premium Cookies", shortName: "Bukkie's Cookies", href: '/cookies', image: '/images/products/cookies-label.jpg' }
-    : { name: 'Richie Premium Chinchin', shortName: 'Richie Chinchin', href: '/chinchin', image: '/images/products/chinchin-label.jpg' }),
+    ? { name: "Bukkie's Premium Cookies", shortName: "Bukkie's Cookies", href: '/cookies', image: '/images/products/cookies-jar.jpg' }
+    : { name: 'Richie Premium Chinchin', shortName: 'Richie Chinchin', href: '/chinchin', image: '/images/products/chinchin-jar.jpg' }),
 })
 
 export const PRODUCTS: Record<ProductId, Product> = {

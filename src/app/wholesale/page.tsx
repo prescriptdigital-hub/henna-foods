@@ -65,7 +65,7 @@ export default function WholesalePage() {
           </div>
           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-soft border border-gold/25">
             <Image
-              src="/images/products/collection.jpg"
+              src="/images/products/multipacks-stacked.jpg"
               alt="Multipacks of Bukkie's cookies and Richie chinchin side by side"
               fill
               priority

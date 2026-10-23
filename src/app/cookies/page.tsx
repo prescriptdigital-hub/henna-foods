@@ -36,10 +36,10 @@ export default function CookiesPage() {
   const product = PRODUCTS[sku]
 
   const images = [
-    { src: '/images/products/cookies-label.jpg', label: "Bukkie's jar with gold ribbon and label" },
-    { src: '/images/products/cookies-trio.jpg', label: "Three jars of Bukkie's cookies" },
-    { src: '/images/products/cookies-stack.jpg', label: "Stacked jars of Bukkie's cookies" },
-    { src: '/images/products/cookies-multipack.jpg', label: "Bukkie's gift multipack" },
+    { src: '/images/products/cookies-jar.jpg', label: "A jar of Bukkie's cookies tied with gold ribbon" },
+    { src: '/images/products/cookies-closeup.jpg', label: "Golden Bukkie's butter cookies, one broken open" },
+    { src: '/images/products/cookies-pyramid.jpg', label: "Three jars of Bukkie's cookies stacked in a pyramid" },
+    { src: '/images/products/cookies-multipack-burgundy.jpg', label: "A Bukkie's gift multipack on burgundy stone" },
   ]
 
   return (

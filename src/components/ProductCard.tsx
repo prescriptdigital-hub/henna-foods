@@ -49,27 +49,35 @@ export default function ProductCard({
   const reviews = REVIEWS[variant]
 
   const photos = {
-    cookies: { src: '/images/products/cookies-label.jpg', alt: "Bukkie's Premium Cookies jar with gold ribbon" },
-    chinchin: { src: '/images/products/chinchin-label.jpg', alt: 'Richie Premium Chinchin jar with gold ribbon' },
+    cookies: {
+      src: '/images/products/cookies-jar-cutout.png',
+      alt: "Bukkie's Premium Cookies jar with gold ribbon",
+      bg: 'radial-gradient(circle at 50% 42%, #FFF9EF 0%, #FBE6C4 48%, rgba(196,30,58,0.28) 100%)',
+    },
+    chinchin: {
+      src: '/images/products/chinchin-jar-cutout.png',
+      alt: 'Richie Premium Chinchin jar with gold ribbon',
+      bg: 'radial-gradient(circle at 50% 42%, #FFF9EF 0%, #FFE7A8 50%, rgba(242,138,46,0.45) 100%)',
+    },
   }
 
   return (
     <div className="product-card group flex flex-col h-full">
       <Link href={href} className="block overflow-hidden rounded-t-[24px]">
-        <div className="relative h-64 bg-cream overflow-hidden">
+        <div className="relative h-72 overflow-hidden" style={{ background: photos[variant].bg }}>
           <Image
             src={photos[variant].src}
             alt={photos[variant].alt}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-contain px-10 pt-6 pb-10 drop-shadow-[0_18px_22px_rgba(59,31,16,0.28)] transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-2"
           />
           {badge && (
             <div className="absolute top-4 left-4 z-10">
               <Badge variant="bestseller">{badge}</Badge>
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-chocolate/60 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
             <span className="font-heading text-white/90 text-sm font-medium italic drop-shadow">
               {tagline}

@@ -1,7 +1,8 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useReducer, useState } from 'react'
-import { cartTotals, isProductId, PRODUCTS, type Product, type ProductId } from '@/lib/catalog'
+import { cartTotals, isProductId, type Product, type ProductId } from '@/lib/catalog'
+import { useCatalog } from './CatalogContext'
 
 export type CartItem = {
   id: ProductId
@@ -91,6 +92,7 @@ const STORAGE_KEY = 'henna-cart'
 const CartContext = createContext<CartContextType | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { skus } = useCatalog()
   const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
   const [loaded, setLoaded] = useState(false)
 
@@ -100,13 +102,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
       if (Array.isArray(saved)) {
         const items = saved
-          .filter(i => isProductId(i?.id) && Number.isInteger(i?.quantity) && i.quantity > 0)
+          .filter(i => typeof i?.id === 'string' && Number.isInteger(i?.quantity) && i.quantity > 0)
           .map(i => ({ id: i.id as ProductId, quantity: i.quantity as number }))
         dispatch({ type: 'HYDRATE', payload: items })
       }
     } catch {}
     setLoaded(true)
   }, [])
+
+  // Drop sizes that are no longer on sale
+  useEffect(() => {
+    if (!loaded) return
+    const onSale = state.items.filter(i => isProductId(skus, i.id))
+    if (onSale.length !== state.items.length) dispatch({ type: 'HYDRATE', payload: onSale })
+  }, [loaded, skus, state.items])
 
   useEffect(() => {
     if (!loaded) return
@@ -124,12 +133,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const toggleCart = () => dispatch({ type: 'TOGGLE_CART' })
   const closeCart = () => dispatch({ type: 'CLOSE_CART' })
 
-  const lines = state.items.map(item => {
-    const product = PRODUCTS[item.id]
+  // Sizes removed or switched off in the dashboard drop out of the basket
+  const lines = state.items.flatMap(item => {
+    if (!isProductId(skus, item.id)) return []
+    const product = skus[item.id]
     const unitPrice = product.price
-    return { ...item, product, unitPrice, lineTotal: unitPrice * item.quantity }
+    return [{ ...item, product, unitPrice, lineTotal: unitPrice * item.quantity }]
   })
-  const totals = cartTotals(state.items)
+  const totals = cartTotals(state.items, skus)
 
   return (
     <CartContext.Provider

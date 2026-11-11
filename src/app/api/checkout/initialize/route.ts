@@ -1,15 +1,8 @@
 import { NextResponse } from 'next/server'
-import {
-  cartTotals,
-  formatMoney,
-  isCurrency,
-  isProductId,
-  PRODUCTS,
-  type LineInput,
-  type ProductId,
-} from '@/lib/catalog'
+import { cartTotals, formatMoney, isCurrency, isProductId, type LineInput } from '@/lib/catalog'
+import { getCatalog } from '@/lib/catalog-store'
 import { paystackConfigured, paystackRequest } from '@/lib/paystack'
-import { DELIVERY_COUNTRY, deliveryAreaById } from '@/lib/delivery'
+import { DELIVERY_COUNTRY, findArea } from '@/lib/delivery'
 
 type Body = {
   items?: unknown
@@ -29,14 +22,15 @@ export async function POST(req: Request) {
   }
 
   const body = (await req.json().catch(() => ({}))) as Body
+  const { skus, delivery } = await getCatalog()
 
   // Rebuild the order from the catalog; the browser only tells us ids and quantities.
-  const merged = new Map<ProductId, number>()
+  const merged = new Map<string, number>()
   if (Array.isArray(body.items)) {
     for (const raw of body.items) {
       const id = raw?.id
       const qty = Number(raw?.quantity)
-      if (isProductId(id) && Number.isInteger(qty) && qty > 0 && qty <= 1000) {
+      if (isProductId(skus, id) && Number.isInteger(qty) && qty > 0 && qty <= 1000) {
         merged.set(id, (merged.get(id) ?? 0) + qty)
       }
     }
@@ -62,7 +56,7 @@ export async function POST(req: Request) {
   }
 
   // Delivery is priced in naira per Lagos area; anything else is quoted by the team
-  const area = deliveryAreaById(body.deliveryAreaId)
+  const area = findArea(delivery, body.deliveryAreaId)
   if (customer.country !== DELIVERY_COUNTRY || !area || area.fee === null) {
     return NextResponse.json(
       { error: "Delivery to this area is quoted on request. Please contact us and we'll send you a payment link." },
@@ -74,12 +68,12 @@ export async function POST(req: Request) {
   const displayCurrency = isCurrency(body.currency) ? body.currency : 'NGN'
   // Delivery fees are in naira, so orders are charged in naira
   const currency = 'NGN' as const
-  const totals = cartTotals(lines)
+  const totals = cartTotals(lines, skus)
   const amount = totals.total + area.fee
   const reference = `HF-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase()
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin
 
-  const itemSummary = lines.map(l => `${l.quantity} x ${PRODUCTS[l.id].name} ${PRODUCTS[l.id].size}`).join(', ')
+  const itemSummary = lines.map(l => `${l.quantity} x ${skus[l.id].name} ${skus[l.id].size}`).join(', ')
   const deliveryAddress = [customer.address, customer.city, customer.region, customer.country].filter(Boolean).join(', ')
 
   try {
@@ -92,7 +86,8 @@ export async function POST(req: Request) {
         reference,
         callback_url: `${origin}/thank-you`,
         metadata: {
-          items: lines,
+          // Prices are recorded with the order so the alert matches what was paid
+          items: lines.map(l => ({ ...l, name: skus[l.id].name, size: skus[l.id].size, price: skus[l.id].price })),
           delivery_area: area.name,
           delivery_fee: area.fee,
           display_currency: displayCurrency,

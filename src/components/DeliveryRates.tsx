@@ -2,16 +2,17 @@
 
 import { useMemo, useState } from 'react'
 import { formatMoney } from '@/lib/catalog'
-import { DELIVERY_AREAS } from '@/lib/delivery'
+import { useCatalog } from '@/context/CatalogContext'
 
 // Searchable list of delivery areas and fees
 export default function DeliveryRates() {
+  const { delivery } = useCatalog()
   const [query, setQuery] = useState('')
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return q ? DELIVERY_AREAS.filter(a => a.name.toLowerCase().includes(q)) : DELIVERY_AREAS
-  }, [query])
+    return q ? delivery.filter(a => a.name.toLowerCase().includes(q)) : delivery
+  }, [query, delivery])
 
   return (
     <div>
@@ -46,7 +47,7 @@ export default function DeliveryRates() {
           </li>
         )}
       </ul>
-      <p className="font-body text-xs text-chocolate/45 mt-2">{DELIVERY_AREAS.length} areas across Lagos. Fees are per order.</p>
+      <p className="font-body text-xs text-chocolate/45 mt-2">{delivery.length} areas across Lagos. Fees are per order.</p>
     </div>
   )
 }

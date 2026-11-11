@@ -3,6 +3,7 @@
 import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
 import { cartTotals, formatMoney, type Currency } from '@/lib/catalog'
+import { useCatalog } from '@/context/CatalogContext'
 
 type Props = {
   size?: 'sm' | 'md'
@@ -18,7 +19,8 @@ type Props = {
 export default function OrderTotals({ size = 'md', currency: override, deliveryFee, deliveryLabel, pendingText = 'Calculated at checkout' }: Props) {
   const { state } = useCart()
   const { format: formatShown, currency: shown } = useCurrency()
-  const { jars, subtotal, discount, tier, total } = cartTotals(state.items)
+  const { skus } = useCatalog()
+  const { jars, subtotal, discount, tier, total } = cartTotals(state.items, skus)
   const fee = typeof deliveryFee === 'number' ? deliveryFee : 0
   // Amounts are naira; show them in naira when forced (checkout), otherwise in the visitor's currency
   const format = (naira: number) => (override === 'NGN' ? formatMoney(naira, 'NGN') : formatShown(naira))

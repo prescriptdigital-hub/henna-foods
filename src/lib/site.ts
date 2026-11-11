@@ -21,7 +21,8 @@ export const SOCIAL = {
 
 // Star ratings shown on product cards and pages. Add real figures as reviews come
 // in, e.g. { rating: 4.9, count: 37 }. Left as null, no stars are shown.
-export const REVIEWS: Record<'cookies' | 'chinchin', { rating: number; count: number } | null> = {
+// Keyed by product web address (slug)
+export const REVIEWS: Record<string, { rating: number; count: number } | null> = {
   cookies: null,
   chinchin: null,
 }

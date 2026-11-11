@@ -50,7 +50,7 @@ export default function LiveChat() {
   }, [open])
 
   // Payment pages stay distraction-free
-  if (!enabled || pathname === '/checkout' || state.isOpen) return null
+  if (!enabled || pathname === '/checkout' || pathname.startsWith('/admin') || state.isOpen) return null
 
   const send = (e: React.FormEvent) => {
     e.preventDefault()

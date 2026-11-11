@@ -1,8 +1,10 @@
-// Delivery areas and fees (naira). Used by checkout and by the payment API,
-// so the fee a customer sees is the fee they are charged.
-// To change a fee, edit the number. Use null for areas quoted on request.
+// Built-in delivery areas and fees (naira). The admin dashboard can replace
+// these; checkout and the payment API always read the saved list, so the fee
+// a customer sees is the fee they are charged.
+// null means the area is quoted on request.
 
-export type DeliveryArea = { id: string; name: string; fee: number | null }
+export type DeliveryFee = { name: string; fee: number | null }
+export type DeliveryArea = DeliveryFee & { id: string }
 
 const AREAS: [string, number | null][] = [
   ['Abulado', 5500],
@@ -100,17 +102,22 @@ const AREAS: [string, number | null][] = [
   ['Yaba', 2500],
 ]
 
-const slug = (s: string) => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+export const DEFAULT_DELIVERY: DeliveryFee[] = AREAS.map(([name, fee]) => ({ name, fee }))
 
-export const DELIVERY_AREAS: DeliveryArea[] = AREAS.map(([name, fee]) => ({ id: slug(name), name, fee })).sort((a, b) =>
-  a.name.localeCompare(b.name)
-)
+export const areaId = (s: string) => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+export function toDeliveryAreas(list: DeliveryFee[]): DeliveryArea[] {
+  return list.map(a => ({ ...a, id: areaId(a.name) })).sort((a, b) => a.name.localeCompare(b.name))
+}
 
 export const DELIVERY_COUNTRY = 'Nigeria'
 export const NOT_LISTED = 'not-listed'
 
-export function deliveryAreaById(id: unknown): DeliveryArea | undefined {
-  return typeof id === 'string' ? DELIVERY_AREAS.find(a => a.id === id) : undefined
+export function findArea(areas: DeliveryArea[], id: unknown): DeliveryArea | undefined {
+  return typeof id === 'string' ? areas.find(a => a.id === id) : undefined
 }
 
-export const LOWEST_DELIVERY_FEE = Math.min(...DELIVERY_AREAS.flatMap(a => (a.fee === null ? [] : [a.fee])))
+export function lowestFee(areas: DeliveryArea[]) {
+  const fees = areas.flatMap(a => (a.fee === null ? [] : [a.fee]))
+  return fees.length ? Math.min(...fees) : null
+}

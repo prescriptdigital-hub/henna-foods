@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from 'crypto'
 import { NextResponse } from 'next/server'
-import { cartTotals, formatMoney, isProductId, PRODUCTS, type LineInput } from '@/lib/catalog'
+import { cartTotals, formatMoney, type LineInput, type Product } from '@/lib/catalog'
+import { getCatalog } from '@/lib/catalog-store'
 import { detailsTable, escapeHtml, sendEmail, teamInbox } from '@/lib/email'
 
 // Paystack calls this after each payment (Paystack dashboard > Settings >
@@ -17,7 +18,7 @@ type Charge = {
 }
 
 type OrderMeta = {
-  items?: { id?: unknown; quantity?: unknown }[]
+  items?: { id?: unknown; quantity?: unknown; name?: unknown; size?: unknown; price?: unknown }[]
   delivery_area?: string
   delivery_fee?: number
   display_currency?: string
@@ -54,10 +55,25 @@ export async function POST(req: Request) {
 
   const meta = (typeof charge.metadata === 'string' ? JSON.parse(charge.metadata || '{}') : charge.metadata ?? {}) as OrderMeta
   const c = meta.customer ?? {}
-  const lines: LineInput[] = (meta.items ?? [])
-    .filter(i => isProductId(i.id) && Number.isInteger(i.quantity))
-    .map(i => ({ id: i.id as LineInput['id'], quantity: i.quantity as number }))
-  const totals = cartTotals(lines)
+  // Use the names and prices recorded when the customer paid; older orders
+  // without them fall back to today's catalog
+  const { skus: current } = await getCatalog()
+  const skus: Record<string, Product> = {}
+  const lines: LineInput[] = []
+  for (const i of meta.items ?? []) {
+    if (typeof i.id !== 'string' || !Number.isInteger(i.quantity)) continue
+    const known = current[i.id]
+    const price = typeof i.price === 'number' ? i.price : known?.price
+    if (price === undefined) continue
+    skus[i.id] = {
+      ...(known ?? { id: i.id, slug: '', shortName: '', weight: '', href: '', image: '' }),
+      name: typeof i.name === 'string' ? i.name : known?.name ?? i.id,
+      size: typeof i.size === 'string' ? i.size : known?.size ?? '',
+      price,
+    }
+    lines.push({ id: i.id, quantity: i.quantity as number })
+  }
+  const totals = cartTotals(lines, skus)
   const naira = (n: number) => formatMoney(n, 'NGN')
   const paid = charge.amount / 100
   const name = [c.firstName, c.lastName].filter(Boolean).join(' ') || 'A customer'
@@ -65,7 +81,7 @@ export async function POST(req: Request) {
 
   const itemRows = lines
     .map(l => {
-      const p = PRODUCTS[l.id]
+      const p = skus[l.id]
       return `<tr><td>${l.quantity} x</td><td>${escapeHtml(`${p.name} ${p.size}`)}</td><td align="right">${naira(p.price * l.quantity)}</td></tr>`
     })
     .join('')

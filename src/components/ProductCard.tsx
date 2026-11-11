@@ -6,18 +6,9 @@ import Link from 'next/link'
 import Badge from './Badge'
 import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
-import { PRODUCT_LINES, PRODUCTS, type ProductId } from '@/lib/catalog'
+import { buyableSizes, productHref, type ProductDoc, type ProductId } from '@/lib/catalog'
 import SizePicker from './SizePicker'
 import { REVIEWS } from '@/lib/site'
-
-type ProductCardProps = {
-  name: string
-  tagline: string
-  description: string
-  href: string
-  badge?: string
-  variant?: 'cookies' | 'chinchin'
-}
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
   return (
@@ -34,32 +25,29 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
   )
 }
 
-export default function ProductCard({
-  name,
-  tagline,
-  description,
-  href,
-  badge,
-  variant = 'cookies',
-}: ProductCardProps) {
+export default function ProductCard({ product }: { product: ProductDoc }) {
   const { addItem } = useCart()
   const { format } = useCurrency()
-  const [sku, setSku] = useState<ProductId>(PRODUCT_LINES[variant][0])
-  const product = PRODUCTS[sku]
-  const reviews = REVIEWS[variant]
-
-  const photos = {
-    cookies: { src: '/images/products/cookies-label.jpg', alt: "Bukkie's Premium Cookies jar with gold ribbon" },
-    chinchin: { src: '/images/products/chinchin-label.jpg', alt: 'Richie Premium Chinchin jar with gold ribbon' },
+  const sizes = buyableSizes(product)
+  const [sku, setSku] = useState<ProductId>(sizes[0]?.sku ?? '')
+  const size = sizes.find(s => s.sku === sku) ?? sizes[0]
+  const reviews = REVIEWS[product.slug]
+  const { name, tagline, summary: description, badge } = product
+  const href = productHref(product.slug)
+  const photo = {
+    src: product.cardImage || product.images[0]?.src || '/images/brand/logo.png',
+    alt: product.images[0]?.alt || name,
   }
+
+  if (!size) return null
 
   return (
     <div className="product-card group flex flex-col h-full">
       <Link href={href} className="block overflow-hidden rounded-t-[24px]">
         <div className="relative h-64 bg-cream overflow-hidden">
           <Image
-            src={photos[variant].src}
-            alt={photos[variant].alt}
+            src={photo.src}
+            alt={photo.alt}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -94,17 +82,17 @@ export default function ProductCard({
         </p>
 
         <div className="mt-4">
-          <SizePicker line={variant} value={sku} onChange={setSku} compact />
+          <SizePicker sizes={sizes} value={size.sku} onChange={setSku} compact />
         </div>
 
         <div className="mt-5 pt-4 border-t border-gold/20 flex items-center justify-between gap-3">
           <div>
             <span className="font-heading text-2xl font-semibold text-chocolate">
-              {format(product.price)}
+              {format(size.price)}
             </span>
           </div>
           <button
-            onClick={() => addItem(sku)}
+            onClick={() => addItem(size.sku)}
             className="btn-primary text-xs px-5 py-2.5"
           >
             Add to Cart

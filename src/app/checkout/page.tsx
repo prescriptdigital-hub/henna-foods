@@ -7,13 +7,15 @@ import { useCart } from '@/context/CartContext'
 import { useCurrency } from '@/context/CurrencyContext'
 import OrderTotals from '@/components/OrderTotals'
 import { cartTotals, formatMoney } from '@/lib/catalog'
-import { DELIVERY_AREAS, DELIVERY_COUNTRY, NOT_LISTED, deliveryAreaById } from '@/lib/delivery'
+import { DELIVERY_COUNTRY, NOT_LISTED, findArea } from '@/lib/delivery'
+import { useCatalog } from '@/context/CatalogContext'
 import { CONTACT } from '@/lib/site'
 
 const countries = [DELIVERY_COUNTRY, 'Ghana', 'United Kingdom', 'United States', 'Canada', 'Other']
 
 export default function CheckoutPage() {
   const { state, lines } = useCart()
+  const { skus, delivery } = useCatalog()
   const { currency } = useCurrency()
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
@@ -27,11 +29,11 @@ export default function CheckoutPage() {
 
   // Delivery: a listed Lagos area with a fee can pay online; anything else gets a quote
   const inNigeria = form.country === DELIVERY_COUNTRY
-  const area = inNigeria ? deliveryAreaById(form.area) : undefined
+  const area = inNigeria ? findArea(delivery, form.area) : undefined
   const needsQuote = !inNigeria || form.area === NOT_LISTED || (area !== undefined && area.fee === null)
   const deliveryFee = needsQuote ? null : area?.fee
   const canPay = !needsQuote && typeof deliveryFee === 'number'
-  const orderTotal = cartTotals(state.items).total + (typeof deliveryFee === 'number' ? deliveryFee : 0)
+  const orderTotal = cartTotals(state.items, skus).total + (typeof deliveryFee === 'number' ? deliveryFee : 0)
 
   const quotePlace = !inNigeria
     ? [form.city, form.country].filter(Boolean).join(', ')
@@ -124,7 +126,7 @@ export default function CheckoutPage() {
                     <label htmlFor="area" className={label}>Delivery area</label>
                     <select id="area" value={form.area} onChange={set('area')} className="input-henna" required>
                       <option value="" disabled>Choose your area</option>
-                      {DELIVERY_AREAS.map(a => (
+                      {delivery.map(a => (
                         <option key={a.id} value={a.id}>
                           {a.name} · {a.fee === null ? 'quote on request' : formatMoney(a.fee, 'NGN')}
                         </option>

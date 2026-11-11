@@ -4,6 +4,8 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/context/CartContext'
 import { CurrencyProvider } from '@/context/CurrencyContext'
+import { CatalogProvider } from '@/context/CatalogContext'
+import { getStore } from '@/lib/catalog-store'
 import { SITE_URL } from '@/lib/catalog'
 import LiveChat from '@/components/LiveChat'
 import AnnouncementBar from '@/components/AnnouncementBar'
@@ -42,22 +44,25 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const store = await getStore()
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${inter.variable}`}>
       <body className="bg-cream font-body text-chocolate antialiased">
-        <CurrencyProvider>
-          <CartProvider>
-            <AnnouncementBar />
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <CartSummary />
-            <Suspense fallback={null}>
-              <LiveChat />
-            </Suspense>
-          </CartProvider>
-        </CurrencyProvider>
+        <CatalogProvider data={store}>
+          <CurrencyProvider>
+            <CartProvider>
+              <AnnouncementBar areas={store.delivery} />
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <CartSummary />
+              <Suspense fallback={null}>
+                <LiveChat />
+              </Suspense>
+            </CartProvider>
+          </CurrencyProvider>
+        </CatalogProvider>
       </body>
     </html>
   )

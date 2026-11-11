@@ -1,27 +1,30 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import ProductCard from '@/components/ProductCard'
+import ProductGrid from '@/components/ProductGrid'
+import { visibleProducts, type ProductDoc } from '@/lib/catalog'
+import { getCatalog } from '@/lib/catalog-store'
 import QualityIconCard from '@/components/QualityIconCard'
 import Newsletter from '@/components/Newsletter'
 import KenBurnsShowcase from '@/components/KenBurnsShowcase'
 import HeroSection from '@/components/HeroSection'
 import { GALLERY } from '@/lib/gallery'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const products = visibleProducts(await getCatalog())
   return (
     <>
       <HeroSection />
-      <ProductShowcaseSection />
+      <ProductShowcaseSection products={products} />
       <GalleryShowcaseSection />
       <BrandStorySection />
       <QualityPromiseSection />
-      <FeaturedProductsSection />
+      <FeaturedProductsSection products={products} />
       <Newsletter />
     </>
   )
 }
 
-function ProductShowcaseSection() {
+function ProductShowcaseSection({ products }: { products: ProductDoc[] }) {
   return (
     <section className="section-padding bg-ivory">
       <div className="container-henna">
@@ -33,24 +36,7 @@ function ProductShowcaseSection() {
           <div className="gold-divider mx-auto mt-5" />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <ProductCard
-            name="Bukkie's Premium Cookies"
-            tagline="Rich. Buttery. Unforgettable."
-            description="Golden-baked butter cookies, crafted with premium ingredients for a warm, joyful treat."
-            href="/cookies"
-            badge="Best Seller"
-            variant="cookies"
-          />
-          <ProductCard
-            name="Richie Premium Chinchin"
-            tagline="Crunchy. Joyful. Delicious."
-            description="A golden crunchy snack made for sharing, celebration, and everyday enjoyment. Pure joy in every bite."
-            href="/chinchin"
-            badge="New"
-            variant="chinchin"
-          />
-        </div>
+        <ProductGrid products={products} />
       </div>
     </section>
   )
@@ -187,7 +173,7 @@ function QualityPromiseSection() {
   )
 }
 
-function FeaturedProductsSection() {
+function FeaturedProductsSection({ products }: { products: ProductDoc[] }) {
   return (
     <section className="section-padding" style={{ backgroundColor: '#FFF4E1' }}>
       <div className="container-henna">
@@ -203,23 +189,7 @@ function FeaturedProductsSection() {
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl">
-          <ProductCard
-            name="Bukkie's Premium Cookies"
-            tagline="Rich. Buttery. Unforgettable."
-            description="Made with fine ingredients, rich butter goodness, baked to perfection, and perfect for gifting and sharing."
-            href="/cookies"
-            badge="Best Seller"
-            variant="cookies"
-          />
-          <ProductCard
-            name="Richie Premium Chinchin"
-            tagline="Crunchy. Joyful. Delicious."
-            description="Perfect crunchy texture, joyful snack for every moment, great for gifting and parties, made with care."
-            href="/chinchin"
-            variant="chinchin"
-          />
-        </div>
+        <ProductGrid products={products} center={false} />
       </div>
     </section>
   )

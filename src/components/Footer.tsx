@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import HennaLogo from './HennaLogo'
-import { FEATURES, SOCIAL } from '@/lib/site'
+import { CONTACT, FEATURES, SOCIAL } from '@/lib/site'
 import { useSubscribe } from './Newsletter'
 
 const shopLinks = [
@@ -114,6 +114,9 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <a href={CONTACT.phoneLink} className="inline-block mt-4 font-body text-sm opacity-90 hover:text-gold transition-colors">
+              Call or WhatsApp <span className="font-semibold">{CONTACT.phone}</span>
+            </a>
 
             <div className="mt-8">
               <h4 className="font-heading text-base font-semibold mb-3" style={{ color: '#D6A62F' }}>

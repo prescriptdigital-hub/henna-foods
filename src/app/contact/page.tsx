@@ -149,15 +149,20 @@ ${form.email}`
                 <h2 className="font-heading text-2xl font-semibold text-chocolate mb-6">Get in touch</h2>
                 <div className="space-y-4">
                   {[
-                    { icon: 'mail' as const, label: 'Email', value: CONTACT.email },
-                    { icon: 'pin' as const, label: 'Location', value: CONTACT.location },
-                    { icon: 'clock' as const, label: 'Response time', value: 'Within 1-2 business days' },
+                    { icon: 'phone' as const, label: 'Phone and WhatsApp', value: CONTACT.phone, href: CONTACT.phoneLink },
+                    { icon: 'mail' as const, label: 'Email', value: CONTACT.email, href: `mailto:${CONTACT.email}` },
+                    { icon: 'pin' as const, label: 'Location', value: CONTACT.location, href: '' },
+                    { icon: 'clock' as const, label: 'Response time', value: 'Within 1-2 business days', href: '' },
                   ].map(item => (
                     <div key={item.label} className="flex items-start gap-4 p-4 bg-ivory rounded-xl border border-gold/20">
                       <span className="mt-0.5 shrink-0"><LineIcon name={item.icon} /></span>
                       <div>
                         <div className="font-body text-xs font-semibold text-chocolate/60 uppercase tracking-wide mb-0.5">{item.label}</div>
-                        <div className="font-body text-sm text-chocolate">{item.value}</div>
+                        {item.href ? (
+                          <a href={item.href} className="font-body text-sm text-chocolate hover:text-gold transition-colors">{item.value}</a>
+                        ) : (
+                          <div className="font-body text-sm text-chocolate">{item.value}</div>
+                        )}
                       </div>
                     </div>
                   ))}

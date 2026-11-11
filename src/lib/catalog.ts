@@ -48,10 +48,10 @@ const sku = (
 })
 
 export const PRODUCTS: Record<ProductId, Product> = {
-  'bukkies-cookies-900g': sku('bukkies-cookies-900g', 'cookies', '900g', 8500),
-  'bukkies-cookies-600g': sku('bukkies-cookies-600g', 'cookies', '600g', 6200),
-  'richie-chinchin-750g': sku('richie-chinchin-750g', 'chinchin', '750g', 5800),
-  'richie-chinchin-500g': sku('richie-chinchin-500g', 'chinchin', '500g', 4400),
+  'bukkies-cookies-900g': sku('bukkies-cookies-900g', 'cookies', '900g', 12500),
+  'bukkies-cookies-600g': sku('bukkies-cookies-600g', 'cookies', '600g', 8500),
+  'richie-chinchin-750g': sku('richie-chinchin-750g', 'chinchin', '750g', 8500),
+  'richie-chinchin-500g': sku('richie-chinchin-500g', 'chinchin', '500g', 6200),
 }
 
 // Sizes offered per product, largest first (the default selection)
